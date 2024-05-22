@@ -1,6 +1,7 @@
 package clients
 
 import (
+	"backend/model"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -12,10 +13,10 @@ var (
 
 const (
 	dbUsername = "root"
-	dbPassword = ""
+	dbPassword = "44898366"
 	dbHost     = "localhost"
 	dbPort     = 3306
-	dbSchema   = "" //
+	dbSchema   = "dbarquisoft1" //
 	dsn        = "%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local"
 )
 
@@ -28,10 +29,14 @@ func ConnectDatabase() {
 		fmt.Println("Error connecting to DB", err)
 		panic(err)
 	}
-
 	fmt.Println("Connection Established")
 }
 
 func MigrateEntities() {
+	err := db.AutoMigrate(&model.Course{}, &model.User{}, &model.UsersXCourses{})
+	if err != nil {
+		fmt.Println("Error migrating to DB", err)
+		panic(err)
+	}
 	fmt.Println("Finishing Migration Database Tables")
 }
