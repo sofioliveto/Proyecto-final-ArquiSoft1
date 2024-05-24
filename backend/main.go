@@ -1,8 +1,20 @@
 package main
 
-import "backend/clients"
+import (
+	"backend/clients"
+	"fmt"
+)
 
 func main() {
+	// Conectar a la base de datos
 	clients.ConnectDatabase()
-	//clients.MigrateEntities()
+
+	// Migrar las entidades
+	clients.MigrateEntities()
+
+	// Otras operaciones de tu aplicación
+	// ...
+
+	fmt.Println("Aplicación lista para usar")
+	// Aquí puedes continuar con la lógica de tu aplicación
 }

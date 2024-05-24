@@ -13,7 +13,7 @@ var (
 
 const (
 	dbUsername = "root"
-	dbPassword = "44898366"
+	dbPassword = "Belgrano1905"
 	dbHost     = "localhost"
 	dbPort     = 3306
 	dbSchema   = "dbarquisoft1" //
@@ -33,7 +33,7 @@ func ConnectDatabase() {
 }
 
 func MigrateEntities() {
-	err := db.AutoMigrate(&model.Course{}, &model.User{}, &model.UsersXCourses{})
+	err := db.AutoMigrate(&model.UsersXCourses{}, &model.User{}, &model.Course{})
 	if err != nil {
 		fmt.Println("Error migrating to DB", err)
 		panic(err)

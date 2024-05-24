@@ -7,4 +7,6 @@ type UsersXCourses struct {
 	UserId            int       `gorm:"foreignKey:UserId"`
 	CourseId          int       `gorm:"foreignKey:CourseId"`
 	fecha_inscripcion time.Time `gorm:"type:date;not null"`
+	User              User      `gorm:"foreignKey:UserId;references:UserId"`
+	Course            Course    `gorm:"foreignKey:CourseId;references:CursoId"`
 }
