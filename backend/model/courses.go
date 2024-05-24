@@ -13,5 +13,4 @@ type Course struct {
 	Requisitos   string    `gorm:"type:varchar(500);not null"`
 	Url_image    string    `gorm:"type:varchar(400);not null"`
 	fecha_inicio time.Time `gorm:"type:date;not null"`
-	Profesor     User      `gorm:"foreignKey:ProfesorId;references:UserId"`
 }
