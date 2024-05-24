@@ -33,7 +33,7 @@ func ConnectDatabase() {
 }
 
 func MigrateEntities() {
-	err := db.AutoMigrate(&model.UsersXCourses{}, &model.User{}, &model.Course{})
+	err := db.AutoMigrate(&model.User{}, &model.Course{}, &model.UsersXCourses{})
 	if err != nil {
 		fmt.Println("Error migrating to DB", err)
 		panic(err)
