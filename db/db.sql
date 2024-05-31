@@ -1,59 +1,85 @@
-CREATE DATABASE IF NOT EXISTS dbarquisoft1;
-USE dbarquisoft1;
-
--- SET SQL_MODE para permitir 0 en AUTO_INCREMENT solo si es necesario
--- SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-
 START TRANSACTION;
 SET time_zone = "+00:00";
 
+--
 -- Creación de tablas
+--
+
 CREATE TABLE IF NOT EXISTS `users` (
-                                       `user_id` INT AUTO_INCREMENT PRIMARY KEY,
-                                       `email` VARCHAR(100) NOT NULL,
-                                       `password` VARCHAR(100) NOT NULL,
-                                       `nombre` VARCHAR(100) NOT NULL,
-                                       `apellido` VARCHAR(100) NOT NULL,
-                                       `admin` BOOLEAN NOT NULL,
-                                       UNIQUE KEY `email` (`email`),  -- Asegura que no haya emails duplicados
-                                       INDEX `apellido` (`apellido`)  -- Índice para mejorar el rendimiento de las consultas por apellido
+                                       `user_id` int(11) NOT NULL,
+                                       `email`  varchar(255) NOT NULL,
+                                       `password` varchar(255) NOT NULL,
+                                       `nombre` varchar(100) NOT NULL,
+                                       `apellido` varchar(100) NOT NULL,
+                                       `admin` boolean NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS `courses` (
-                                         `course_id` INT AUTO_INCREMENT PRIMARY KEY,
-                                         `nombre` VARCHAR(100) NOT NULL,
-                                         `profesor_id` INT NOT NULL,
-                                         `categoria` VARCHAR(100) NOT NULL,
+                                         `course_id` int(11) NOT NULL,
+                                         `nombre` varchar(100) NOT NULL,
+                                         `user_id`  int(11) NOT NULL,
+                                         `categoria` varchar(100) NOT NULL,
                                          `descripcion` VARCHAR(500) NOT NULL,
-                                         `valoracion` FLOAT NOT NULL,
+                                         `valoracion` float NOT NULL,
                                          `duracion` INT NOT NULL,
                                          `requisitos` VARCHAR(500) NOT NULL,
                                          `url_image` VARCHAR(400) NOT NULL,
-                                         `fecha_inicio` DATE NOT NULL,
-                                         FOREIGN KEY (`profesor_id`) REFERENCES `users`(`user_id`) ON DELETE CASCADE,
-                                         UNIQUE KEY `nombre` (`nombre`),  -- Asegura que no haya cursos con el mismo nombre
-                                         INDEX `categoria` (`categoria`),  -- Índices para mejorar el rendimiento de las consultas
-                                         INDEX `valoracion` (`valoracion`),
-                                         INDEX `duracion` (`duracion`),
-                                         INDEX `fecha_inicio` (`fecha_inicio`)
+                                         `fecha_inicio` DATE NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS `users_x_courses` (
-                                                 `users_x_courses_id` INT AUTO_INCREMENT PRIMARY KEY,
-                                                 `user_id` INT NOT NULL,
-                                                 `course_id` INT NOT NULL,
-                                                 `fecha_inscripcion` DATE NOT NULL,
-                                                 FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE CASCADE,
-                                                 FOREIGN KEY (`course_id`) REFERENCES `courses`(`course_id`) ON DELETE CASCADE,
-                                                 UNIQUE KEY `users_x_courses_2` (`user_id`, `course_id`, `fecha_inscripcion`), -- Asegura que una misma combinación no se repita
-                                                 INDEX `fecha_inscripcion` (`fecha_inscripcion`)  -- Índice para mejorar el rendimiento de las consultas por fecha de inscripción
+                                                 `users_x_courses_id` int(11) NOT NULL,
+                                                 `user_id` int(11) NOT NULL,
+                                                 `course_id` int(11) NOT NULL,
+                                                 `fecha_inscripcion` DATE NOT NULL
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
+--
+-- Indexado de tablas
+--
+
+ALTER TABLE `users`
+    ADD PRIMARY KEY (`user_id`),
+    ADD UNIQUE KEY `email` (`email`);
+
+ALTER TABLE `courses`
+    ADD PRIMARY KEY (`course_id`),
+    ADD UNIQUE KEY `nombre` (`nombre`),
+    ADD KEY `profesor_id` (`user_id`);
+
+ALTER TABLE `users_x_courses`
+    ADD PRIMARY KEY (`users_x_courses_id`),
+    ADD UNIQUE KEY `users_x_courses_id2` (`user_id`, `course_id`, `fecha_inscripcion`);
+
+--
+-- Autoincrementado de tablas
+--
+
+ALTER TABLE `users`
+    MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+ALTER TABLE `courses`
+    MODIFY `course_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+ALTER TABLE `users_x_courses`
+    MODIFY `users_x_courses_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- Rellenado de tablas
--- Insertar datos sin especificar `user_id` porque es AUTO_INCREMENT
-INSERT INTO `users` (`email`, `password`, `nombre`, `apellido`, `admin`) VALUES
-                                                                             ('sofiaolivetoo@gmail.com', 'sofi123', 'Sofia', 'Oliveto', false),
-                                                                             ('juanlopez@gmail.com', 'juan123', 'Juan', 'Lopez', true),
-                                                                             ('constanzastrumia@gmail.com', 'coti123', 'Constanza', 'Strumia', false);
+--
+INSERT INTO `users` (`user_id`,`email`, `password`, `nombre`, `apellido`, `admin`) VALUES
+                                                                                       (1, 'sofiaolivetoo@gmail.com', 'sofi123', 'Sofia', 'Oliveto', false),
+                                                                                       (2, 'juanlopez@gmail.com', 'juan123', 'Juan', 'Lopez', true),
+                                                                                       (3, 'constanzastrumia@gmail.com', 'coti123', 'Constanza', 'Strumia', false),
+                                                                                       (4, 'margarita@gmail.com', 'marga123', 'Margarita', 'Lopez', true);
+
+INSERT INTO `courses` (`course_id`,`nombre`, `user_id`, `categoria`, `descripcion`, `valoracion`, `duracion`, `requisitos`, `url_image`, `fecha_inicio`) VALUES
+                                                                                                                                                                 (1,'goland' , 2, 'programacion', 'curso basico de programacion de goland', 4.5, 90000,'ninguno','https://hireline.io/blog/wp-content/uploads/2022/07/habilidades-de-un-programador-1200x900.jpg','2020-06-09'),
+                                                                                                                                                                 (2,'bartender' , 2, 'cocteleria', 'aprende a hacer los mejores tragos', 3.7, 45,'ninguno','https://www.camarero10.com/wp-content/uploads/2022/05/bartender-para-bares-y-restaurantes-1200x900.jpg','2024-06-03'),
+                                                                                                                                                                 (3,'peluqueria_intensiva', 4, 'belleza', 'aprende a hacer desde simples trenzas hasta peinados elaborados', 4.2, 80, 'habilidades basicas de manejo de cabello','https://joseppons.com/formacion/wp-content/uploads/2019/06/abrir-tu-salon-peluqueria.jpg', '2024-07-10');
+
+
 
 COMMIT;
