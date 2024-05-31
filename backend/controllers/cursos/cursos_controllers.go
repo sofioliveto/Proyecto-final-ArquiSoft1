@@ -36,7 +36,7 @@ func GetCourses(c *gin.Context) {
 
 func GetCoursesByName(c *gin.Context) {
 	var coursesDto dto.CoursesDto
-	query := c.Param("searchQuery")
+	query := c.Param("name")
 	coursesDto, err := servicios.CourseService.GetCoursesByName(query)
 
 	if err != nil {

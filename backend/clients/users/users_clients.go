@@ -1,12 +1,10 @@
 package users
 
 import (
+	"backend/clients"
 	"backend/model"
 	log "github.com/sirupsen/logrus"
-	"gorm.io/gorm"
 )
-
-var Db *gorm.DB
 
 type userClient struct{}
 
@@ -25,7 +23,7 @@ func init() {
 
 func (s *userClient) GetUserById(id int) model.Users {
 	var user model.Users
-	Db.Where("user_id = ?", id).First(&user)
+	clients.Db.Where("user_id = ?", id).First(&user)
 	log.Debug("user: ", user)
 
 	return user
@@ -33,7 +31,7 @@ func (s *userClient) GetUserById(id int) model.Users {
 
 func (s *userClient) GetUserByEmail(Email string) (model.Users, error) {
 	var user model.Users
-	result := Db.Where("email = ?", Email).First(&user)
+	result := clients.Db.Where("email = ?", Email).First(&user)
 	if result.Error != nil {
 		return user, result.Error
 	}

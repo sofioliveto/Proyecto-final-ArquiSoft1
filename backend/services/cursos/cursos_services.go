@@ -82,7 +82,6 @@ func (s *courseService) GetCoursesByName(query string) (dto.CoursesDto, errores.
 	var courses model.Coursess
 	courses = s.coursesClient.GetCourseByName(query)
 	var coursesDto dto.CoursesDto
-
 	for _, course := range courses {
 		var courseDto dto.CourseDto
 		courseDto.Course_id = course.Course_id

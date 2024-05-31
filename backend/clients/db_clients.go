@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	db *gorm.DB
+	Db *gorm.DB
 )
 
 const (
@@ -23,7 +23,7 @@ const (
 func ConnectDatabase() {
 	connection := fmt.Sprintf(dsn, dbUsername, dbPassword, dbHost, dbPort, dbSchema)
 	var err error
-	db, err = gorm.Open(mysql.Open(connection), &gorm.Config{})
+	Db, err = gorm.Open(mysql.Open(connection), &gorm.Config{})
 
 	if err != nil {
 		fmt.Println("Error connecting to DB", err)
@@ -33,7 +33,7 @@ func ConnectDatabase() {
 }
 
 func MigrateEntities() {
-	err := db.AutoMigrate(&model.Users{}, &model.Courses{}, &model.Users_x_courses{})
+	err := Db.AutoMigrate(&model.Users{}, &model.Courses{}, &model.Users_x_courses{})
 	if err != nil {
 		fmt.Println("Error migrating to DB", err)
 		panic(err)
