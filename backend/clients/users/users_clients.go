@@ -1,4 +1,4 @@
-package clients
+package users
 
 import (
 	"backend/model"
@@ -37,6 +37,5 @@ func (s *userClient) GetUserByEmail(Email string) (model.Users, error) {
 	if result.Error != nil {
 		return user, result.Error
 	}
-
 	return user, nil
 }

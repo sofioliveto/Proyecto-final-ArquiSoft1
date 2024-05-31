@@ -1,7 +1,7 @@
 package users
 
 import (
-	"backend/clients"
+	"backend/clients/users"
 	"backend/dto"
 	errores "backend/extras"
 	"backend/model"
@@ -10,7 +10,7 @@ import (
 )
 
 type userService struct {
-	userClient clients.UserClientInterface
+	userClient users.UserClientInterface
 }
 
 var (
@@ -22,14 +22,14 @@ type userServiceInterface interface {
 	Login(loginDto dto.LoginDto) (dto.LoginResponseDto, errores.ApiError)
 }
 
-func initUserService(userClient clients.UserClientInterface) userServiceInterface {
+func initUserService(userClient users.UserClientInterface) userServiceInterface {
 	service := new(userService)
 	service.userClient = userClient
 	return service
 }
 
 func init() {
-	UserService = initUserService(clients.UserClient)
+	UserService = initUserService(users.UserClient)
 }
 
 func (s *userService) GetUserById(id int) (dto.UserDto, errores.ApiError) {
@@ -75,13 +75,4 @@ func (s *userService) Login(loginDto dto.LoginDto) (dto.LoginResponseDto, errore
 	loginResponseDto.Token = tokenString
 	log.Debug(loginResponseDto)
 	return loginResponseDto, nil
-}
-
-func Login(request dto.LoginDto) dto.LoginResponseDto {
-
-	//validar base de datos
-
-	return dto.LoginResponseDto{
-		Token: "abcdef123456",
-	}
 }
