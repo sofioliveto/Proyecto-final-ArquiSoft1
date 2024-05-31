@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend/clients"
+	"backend/router"
 	"fmt"
 )
 
@@ -17,4 +18,7 @@ func main() {
 
 	fmt.Println("Aplicación lista para usar")
 	// Aquí puedes continuar con la lógica de tu aplicación
+
+	router.StartRoute()
+
 }

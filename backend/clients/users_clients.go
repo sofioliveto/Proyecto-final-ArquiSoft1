@@ -11,10 +11,8 @@ var Db *gorm.DB
 type userClient struct{}
 
 type UserClientInterface interface {
-	GetUserById(id int) model.User
-	GetUsers() model.Users
-	GetUserByUsername(username string) (model.User, error)
-	InsertUser(user model.User) model.User
+	GetUserById(id int) model.Users
+	GetUserByEmail(email string) (model.Users, error)
 }
 
 var (
@@ -25,25 +23,20 @@ func init() {
 	UserClient = &userClient{}
 }
 
-func GetUserById(id int) model.Users {
+func (s *userClient) GetUserById(id int) model.Users {
 	var user model.Users
-	Db.Where("id = ?", id).First(&user)
-	log.Debug("User: ", user)
+	Db.Where("user_id = ?", id).First(&user)
+	log.Debug("user: ", user)
+
 	return user
 }
 
-func GetUserByEmail(Email string) (model.Users, error) {
+func (s *userClient) GetUserByEmail(Email string) (model.Users, error) {
 	var user model.Users
 	result := Db.Where("email = ?", Email).First(&user)
 	if result.Error != nil {
 		return user, result.Error
 	}
-	return user, nil
-}
 
-type UserClientInterface interface {
-	GetUserById(id int) model.Users
-	GetUsers() model.Users
-	GetUserByEmail(email string) (model.Users, error)
-	InsertUser(user model.Users) model.Users
+	return user, nil
 }
