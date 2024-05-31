@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 CREATE TABLE IF NOT EXISTS `courses` (
                                          `course_id` int(11) NOT NULL,
                                          `nombre` varchar(100) NOT NULL,
-                                         `user_id`  int(11) NOT NULL,
+                                         `profesor_id`  int(11) NOT NULL,
                                          `categoria` varchar(100) NOT NULL,
                                          `descripcion` VARCHAR(500) NOT NULL,
                                          `valoracion` float NOT NULL,
@@ -47,7 +47,7 @@ ALTER TABLE `users`
 ALTER TABLE `courses`
     ADD PRIMARY KEY (`course_id`),
     ADD UNIQUE KEY `nombre` (`nombre`),
-    ADD KEY `profesor_id` (`user_id`);
+    -- ADD KEY `profesor_id` (`user_id`);
 
 ALTER TABLE `users_x_courses`
     ADD PRIMARY KEY (`users_x_courses_id`),
