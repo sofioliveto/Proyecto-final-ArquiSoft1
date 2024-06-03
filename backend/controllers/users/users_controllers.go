@@ -41,6 +41,7 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, er.Error())
 		return
 	}
+
 	log.Debug(loginDto)
 
 	var loginResponseDto dto.LoginResponseDto
