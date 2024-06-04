@@ -13,7 +13,7 @@ var (
 
 const (
 	dbUsername = "root"
-	dbPassword = "margoch"
+	dbPassword = "Belgrano1905"
 	dbHost     = "localhost"
 	dbPort     = 3306
 	dbSchema   = "dbarquisoft1" //

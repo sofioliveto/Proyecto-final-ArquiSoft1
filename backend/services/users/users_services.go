@@ -5,13 +5,13 @@ import (
 	"backend/dto"
 	errores "backend/extras"
 	"backend/model"
+	"crypto/md5"
+	"encoding/hex"
 	"github.com/golang-jwt/jwt/v5"
 	log "github.com/sirupsen/logrus"
 )
 
-type userService struct {
-	userClient users.UserClientInterface
-}
+type userService struct{}
 
 var (
 	UserService userServiceInterface
@@ -19,21 +19,21 @@ var (
 
 type userServiceInterface interface {
 	GetUserById(id int) (dto.UserDto, errores.ApiError)
-	Login(loginDto dto.LoginDto) (dto.LoginResponseDto, errores.ApiError)
+	Login(loginDto dto.LoginDto) (dto.TokenDto, errores.ApiError)
 }
 
-func initUserService(userClient users.UserClientInterface) userServiceInterface {
+/*func initUserService(userClient users.UserClientInterface) userServiceInterface {
 	service := new(userService)
 	service.userClient = userClient
 	return service
-}
+}*/
 
 func init() {
-	UserService = initUserService(users.UserClient)
+	UserService = &userService{}
 }
 
 func (s *userService) GetUserById(id int) (dto.UserDto, errores.ApiError) {
-	var user model.Users = s.userClient.GetUserById(id)
+	var user model.Users = users.UserClient.GetUserById(id)
 	var userDto dto.UserDto
 	if user.User_id == 0 {
 
@@ -48,31 +48,33 @@ func (s *userService) GetUserById(id int) (dto.UserDto, errores.ApiError) {
 	return userDto, nil
 }
 
-func (s *userService) Login(loginDto dto.LoginDto) (dto.LoginResponseDto, errores.ApiError) {
+var jwtKey = []byte("secret_key")
 
+func (s *userService) Login(loginDto dto.LoginDto) (dto.TokenDto, errores.ApiError) {
+
+	log.Debug(loginDto)
 	var user model.Users
-	user, err := s.userClient.GetUserByEmail(loginDto.Email)
-	var loginResponseDto dto.LoginResponseDto
-	loginResponseDto.User_id = -1
+	var tokenDto dto.TokenDto
+	user, err := users.UserClient.GetUserByEmail(loginDto.Email)
+
 	if err != nil {
-		return loginResponseDto, errores.NewBadRequestApiError("Usuario no encontrado")
+		return tokenDto, errores.NewBadRequestApiError("Usuario no encontrado")
 	}
-	if user.Password != loginDto.Password && loginDto.Email != "encrypted" {
-		return loginResponseDto, errores.NewUnauthorizedApiError("Contraseña incorrecta")
+	var pswMd5 = md5.Sum([]byte(loginDto.Password))
+	//convertimos a hexadecimal
+	pswMd5string := hex.EncodeToString(pswMd5[:])
+
+	if pswMd5string == user.Password {
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+			"User_id": user.User_id,
+		})
+		tokenString, _ := token.SignedString(jwtKey)
+		tokenDto.User_id = user.User_id
+		tokenDto.Token = tokenString
+		return tokenDto, nil
+
+	} else {
+		return tokenDto, errores.NewBadRequestApiError("Contraseña incorrecta")
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"username": loginDto.Email,
-		"pass":     loginDto.Password,
-	})
-	var jwtKey = []byte("secret_key")
-	tokenString, _ := token.SignedString(jwtKey)
-	if user.Password != tokenString && loginDto.Email == "encrypted" {
-		return loginResponseDto, errores.NewUnauthorizedApiError("Contraseña incorrecta")
-	}
-
-	loginResponseDto.User_id = user.User_id
-	loginResponseDto.Token = tokenString
-	log.Debug(loginResponseDto)
-	return loginResponseDto, nil
 }

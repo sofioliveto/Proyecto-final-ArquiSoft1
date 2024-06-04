@@ -42,18 +42,11 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	log.Debug(loginDto)
+	tokenDto, err := service.UserService.Login(loginDto)
 
-	var loginResponseDto dto.LoginResponseDto
-	loginResponseDto, err := service.UserService.Login(loginDto)
 	if err != nil {
-		if err.Status() == 400 {
-			c.JSON(http.StatusBadRequest, err.Error())
-			return
-		}
-		c.JSON(http.StatusForbidden, err.Error())
+		c.JSON(err.Status(), err)
 		return
 	}
-
-	c.JSON(http.StatusOK, loginResponseDto)
+	c.JSON(http.StatusOK, tokenDto)
 }
