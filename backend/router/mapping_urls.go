@@ -2,6 +2,7 @@ package router
 
 import (
 	controllers_courses "backend/controllers/cursos"
+	controllers_inscripcion "backend/controllers/inscripcion"
 	controllers_users "backend/controllers/users"
 )
 
@@ -14,4 +15,8 @@ func mapUrls() {
 	router.GET("/courses/:course_id", controllers_courses.GetCourseById)
 	router.GET("/search", controllers_courses.GetCourses)
 	router.GET("/search/:name", controllers_courses.GetCoursesByName)
+
+	//inscripcion mapping
+	router.POST("/inscripcion", controllers_inscripcion.InsertInscr)
+
 }
