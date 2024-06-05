@@ -33,8 +33,14 @@ func init() {
 }
 
 func (s *userService) GetUserById(id int) (dto.UserDto, errores.ApiError) {
-	var user model.Users = users.UserClient.GetUserById(id)
+	var user model.Users
+	user, err := users.UserClient.GetUserById(id)
 	var userDto dto.UserDto
+
+	if err != nil {
+		return userDto, errores.NewBadRequestApiError("user not found")
+	}
+
 	if user.User_id == 0 {
 
 		return userDto, errores.NewBadRequestApiError("user not found")

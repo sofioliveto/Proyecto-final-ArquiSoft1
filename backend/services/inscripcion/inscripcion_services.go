@@ -2,9 +2,11 @@ package inscripcion
 
 import (
 	inscripcionClient "backend/clients/inscripcion"
+	"backend/clients/users"
 	"backend/dto"
 	errores "backend/extras"
 	"backend/model"
+	"net/http"
 	"time"
 )
 
@@ -30,7 +32,18 @@ func (s *inscripService) InsertInscr(inscripDto dto.InscripcionDto) (dto.Inscrip
 	inscripcion.Course_id = inscripDto.Id_course
 	inscripcion.Fecha_inscripcion = time.Now()
 
-	inscripcion = inscripcionClient.InsertInscr(inscripcion)
+	if _, err := users.UserClient.GetUserById(inscripDto.Id_user); err != nil {
+		// Verificar si el error es un NotFoundApiError
+		if apiErr, ok := err.(errores.ApiError); ok && apiErr.Status() == http.StatusNotFound {
+			return inscripDto, apiErr
+		}
+		return inscripDto, errores.NewInternalServerApiError("Error al obtener usuario", err)
+	}
+
+	inscripcion, err := inscripcionClient.InsertInscr(inscripcion)
+	if err != nil {
+		return inscripDto, errores.NewInternalServerApiError("Error al insertar inscripción", err)
+	}
 
 	var inscResponseDto dto.InscripcionDto
 	inscResponseDto.Id_inscripcion = inscripcion.Users_x_courses_id

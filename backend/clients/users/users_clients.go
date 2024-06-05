@@ -9,7 +9,7 @@ import (
 type userClient struct{}
 
 type UserClientInterface interface {
-	GetUserById(id int) model.Users
+	GetUserById(id int) (model.Users, error)
 	GetUserByEmail(email string) (model.Users, error)
 }
 
@@ -21,12 +21,11 @@ func init() {
 	UserClient = &userClient{}
 }
 
-func (s *userClient) GetUserById(id int) model.Users {
+func (s *userClient) GetUserById(id int) (model.Users, error) {
 	var user model.Users
 	clients.Db.Where("user_id = ?", id).First(&user)
 	log.Debug("user: ", user)
-
-	return user
+	return user, nil
 }
 
 func (s *userClient) GetUserByEmail(Email string) (model.Users, error) {
