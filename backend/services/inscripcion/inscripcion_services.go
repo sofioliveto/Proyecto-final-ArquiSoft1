@@ -32,15 +32,17 @@ func (s *inscripService) InsertInscr(inscripDto dto.InscripcionDto) (dto.Inscrip
 	inscripcion.Course_id = inscripDto.Id_course
 	inscripcion.Fecha_inscripcion = time.Now()
 
-	if _, err := users.UserClient.GetUserById(inscripDto.Id_user); err != nil {
+	_, er := users.UserClient.GetUserById(inscripDto.Id_user)
+	if er != nil {
 		// Verificar si el error es un NotFoundApiError
-		if apiErr, ok := err.(errores.ApiError); ok && apiErr.Status() == http.StatusNotFound {
+		if apiErr, ok := er.(errores.ApiError); ok && apiErr.Status() == http.StatusNotFound {
 			return inscripDto, apiErr
 		}
-		return inscripDto, errores.NewInternalServerApiError("Error al obtener usuario", err)
+		return inscripDto, errores.NewInternalServerApiError("Error al obtener usuario", er)
 	}
 
 	inscripcion, err := inscripcionClient.InsertInscr(inscripcion)
+
 	if err != nil {
 		return inscripDto, errores.NewInternalServerApiError("Error al insertar inscripción", err)
 	}

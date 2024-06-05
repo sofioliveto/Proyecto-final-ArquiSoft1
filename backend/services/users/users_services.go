@@ -77,6 +77,7 @@ func (s *userService) Login(loginDto dto.LoginDto) (dto.TokenDto, errores.ApiErr
 		tokenString, _ := token.SignedString(jwtKey)
 		tokenDto.User_id = user.User_id
 		tokenDto.Token = tokenString
+		tokenDto.Admin = user.Admin
 		return tokenDto, nil
 
 	} else {
