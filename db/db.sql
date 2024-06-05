@@ -1,4 +1,4 @@
-START TRANSACTION;
+START TRANSACTION
 SET time_zone = "+00:00";
 
 --
@@ -79,7 +79,4 @@ INSERT INTO `courses` (`course_id`,`nombre`, `profesor_id`, `categoria`, `descri
                                                                                                                                                                  (1,'goland' , 2, 'programacion', 'curso basico de programacion de goland', 4.5, 90000,'ninguno','https://hireline.io/blog/wp-content/uploads/2022/07/habilidades-de-un-programador-1200x900.jpg','2020-06-09'),
                                                                                                                                                                  (2,'bartender' , 2, 'cocteleria', 'aprende a hacer los mejores tragos', 3.7, 45,'ninguno','https://www.camarero10.com/wp-content/uploads/2022/05/bartender-para-bares-y-restaurantes-1200x900.jpg','2024-06-03'),
                                                                                                                                                                  (3,'peluqueria_intensiva', 4, 'belleza', 'aprende a hacer desde simples trenzas hasta peinados elaborados', 4.2, 80, 'habilidades basicas de manejo de cabello','https://joseppons.com/formacion/wp-content/uploads/2019/06/abrir-tu-salon-peluqueria.jpg', '2024-07-10');
-
-
-
 COMMIT;
