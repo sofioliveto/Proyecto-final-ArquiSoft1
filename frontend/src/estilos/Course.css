@@ -1,0 +1,18 @@
+.container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #ecd4b2; 
+    margin: 40px, 40px;
+  }
+
+  .textcontainer{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .prueba{
+    background-color: purple;
+    color: aqua;
+    width: 40vh;
+  }

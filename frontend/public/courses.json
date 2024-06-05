@@ -1,0 +1,38 @@
+[
+    {
+        "course_id": 1,
+        "Nombre": "goland",
+        "Profesor_id": 0,
+        "Categoria": "programacion",
+        "Descripcion": "curso basico de programacion de goland",
+        "Valoracion": 5,
+        "Duracion": 90000,
+        "Requisitos": "ninguno",
+        "Url_image": "https://hireline.io/blog/wp-content/uploads/2022/07/habilidades-de-un-programador-1200x900.jpg",
+        "Fecha_inicio": "2020-06-09T00:00:00-03:00"
+    },
+    {
+        "course_id": 2,
+        "Nombre": "bartender",
+        "Profesor_id": 0,
+        "Categoria": "cocteleria",
+        "Descripcion": "aprende a hacer los mejores tragos",
+        "Valoracion": 4,
+        "Duracion": 45,
+        "Requisitos": "ninguno",
+        "Url_image": "https://www.camarero10.com/wp-content/uploads/2022/05/bartender-para-bares-y-restaurantes-1200x900.jpg",
+        "Fecha_inicio": "2024-06-03T00:00:00-03:00"
+    },
+    {
+        "course_id": 3,
+        "Nombre": "peluqueria_intensiva",
+        "Profesor_id": 0,
+        "Categoria": "belleza",
+        "Descripcion": "aprende a hacer desde simples trenzas hasta peinados elaborados",
+        "Valoracion": 4,
+        "Duracion": 80,
+        "Requisitos": "habilidades basicas de manejo de cabello",
+        "Url_image": "https://joseppons.com/formacion/wp-content/uploads/2019/06/abrir-tu-salon-peluqueria.jpg",
+        "Fecha_inicio": "2024-07-10T00:00:00-03:00"
+    }
+]

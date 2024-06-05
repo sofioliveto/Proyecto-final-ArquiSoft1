@@ -3,6 +3,7 @@ import { Navbar } from './components/Navbar'
 import * as React from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
 import { Course } from './components/Course'
+import { ItemListContainer } from './components/ItemListContainer'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -14,7 +15,7 @@ function App() {
         <Navbar/>
       </header>
       <div>
-      <h2><Course/></h2>
+      <h2><ItemListContainer/></h2>
       </div>
     </>
     </ChakraProvider>
