@@ -4,15 +4,15 @@ import "time"
 
 type CourseDto struct {
 	Course_id    int       `json:"course_id"`
-	Nombre       string    `gorm:"nombre"`
-	Profesor_id  int       `gorm:"profesor_id"`
-	Categoria    string    `gorm:"categoria"`
-	Descripcion  string    `gorm:"descripcion"`
-	Valoracion   float64   `gorm:"valoracion"`
-	Duracion     int       `gorm:"duracion"`
-	Requisitos   string    `gorm:"requisitos"`
-	Url_image    string    `gorm:"url_image"`
-	Fecha_inicio time.Time `gorm:"fecha_inicio"`
+	Nombre       string    `json:"nombre"`
+	Profesor_id  int       `json:"profesor_id"`
+	Categoria    string    `json:"categoria"`
+	Descripcion  string    `json:"descripcion"`
+	Valoracion   float64   `json:"valoracion"`
+	Duracion     int       `json:"duracion"`
+	Requisitos   string    `json:"requisitos"`
+	Url_image    string    `json:"url_image"`
+	Fecha_inicio time.Time `json:"fecha_inicio"`
 }
 
 type CoursesDto []CourseDto

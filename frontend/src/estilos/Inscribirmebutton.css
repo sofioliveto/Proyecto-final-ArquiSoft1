@@ -7,8 +7,10 @@
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-family: 'Spoof Trial', sans-serif;
+    font-weight: 600;
   }
   
-  .subscribe-button:hover {
+.subscribe-button:hover {
     background-color: #333;
-  }
+}

@@ -5,7 +5,7 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
-:root {
+#root {
   --clr-main: #cce206;
   --clr-main-light: #aae06b;
   --clr-background: #343a40;

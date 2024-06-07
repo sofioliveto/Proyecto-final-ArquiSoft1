@@ -1,5 +1,4 @@
 import React from 'react';
-import './Components.css'
 const CustomModal = ({ showModal, closeModal, content }) => {
     return (
         <>

@@ -1,6 +1,7 @@
-import React from 'react'
+//import React from 'react'
 import { Card, CardHeader, CardBody, CardFooter, Heading, Text } from '@chakra-ui/react'
 import '../estilos/Course.css';
+import Inscribirmebutton from "./Inscribirmebutton.jsx";
 
 
 const Item = ({ course }) => {
@@ -20,6 +21,7 @@ const Item = ({ course }) => {
                     <Text>{course.Valoracion}</Text>
                 </CardBody>
                 <CardFooter>
+                    <Inscribirmebutton/>
                 </CardFooter>
             </Card>
         </>

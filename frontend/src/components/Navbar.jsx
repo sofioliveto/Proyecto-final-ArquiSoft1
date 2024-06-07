@@ -1,13 +1,12 @@
-import React from 'react'
 import BurgerMenu from './BurgerMenu'
 import '../estilos/Navbar.css';
 
 export const Navbar = () => {
   return (
     <header>
-      <div className='container'>
+      <div className='contenedor'>
         <div className='logoContainer'>
-          <img src="/favicon.jpg" alt="cafe y libros" />
+          <img src="/icon.png" alt="cafe y libros" width="100px" height="40px"/>
         </div>
         <div className='titleContainer'>
           Coffee&Learn
