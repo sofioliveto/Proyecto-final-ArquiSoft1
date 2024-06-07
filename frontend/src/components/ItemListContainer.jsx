@@ -8,13 +8,11 @@ export const ItemListContainer = () => {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                //const response = await axios.get('/courses.json');
-                //setCourses(response.data);
-                const response = await fetch('/courses.json');
-                const jsonData = await response.json();
-                setCourses(jsonData);
-
-
+                const response = await axios.get('/courses.json');
+                setCourses(response.data);
+                // const response = await fetch('/courses.json');
+                // const jsonData = await response.json();
+                // setCourses(jsonData);
             } catch (error) {
                 console.error(error)
             }
@@ -23,14 +21,14 @@ export const ItemListContainer = () => {
         fetchCourses()
     }, [])
 
-  return (
-    <>
-        <ItemList courses={courses}/> 
-        {/* {courses.map((c) => {
+    return (
+        <>
+            <ItemList courses={courses} />
+            {/* {courses.map((c) => {
             console.log(c)
         })}
         {console.log(courses)} */}
-    </>
+        </>
 
-  )
+    )
 }
