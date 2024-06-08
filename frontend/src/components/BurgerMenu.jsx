@@ -30,8 +30,12 @@ const BurgerMenu = () => {
                     <DrawerHeader>Menú</DrawerHeader>
                     <DrawerBody>
                         <VStack spacing={4}>
-                            <Button w="100%">Página principal</Button>
-                            <Button w="100%">Iniciar sesión</Button>
+                            <Button w="100%">
+                                Página principal
+                            </Button>
+                            <Button w="100%">
+                                Iniciar sesión
+                            </Button>
                         </VStack>
                     </DrawerBody>
                 </DrawerContent>

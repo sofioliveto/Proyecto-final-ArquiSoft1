@@ -27,13 +27,13 @@ const Item = ({ course }) => {
                         {course.descripcion}
                     </Text>
                     <Text py='2'>
-                        <img src="/estrella.png" alt="estrella" width="20px" height="20px"/>{course.valoracion}/5
+                    {course.categoria}
                     </Text>
-                    <Text py='2'>
-                        {course.categoria}
+                    <Text py='2' display='flex' alignItems='center'>
+                        <img src="/estrella.png" alt="estrella" width="20px" height="20px" style={{ marginRight: '5px' }}/>
+                        {course.valoracion}/5
                     </Text>
                 </CardBody>
-
                 <CardFooter>
                     <Inscribirmebutton/>
                 </CardFooter>
