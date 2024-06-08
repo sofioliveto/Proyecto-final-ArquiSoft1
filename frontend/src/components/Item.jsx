@@ -16,7 +16,7 @@ const Item = ({ course }) => {
                 objectFit='cover'
                 maxW={{ base: '100%', sm: '200px' }}
                 src={course.url_image}
-                alt='Caffe Latte'
+                alt='Imagen Curso'
             />
 
             <Stack>
