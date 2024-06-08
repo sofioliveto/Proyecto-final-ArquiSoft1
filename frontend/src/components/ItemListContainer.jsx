@@ -5,19 +5,10 @@ export const ItemListContainer = () => {
     const [courses, setCourses] = useState([]);
 
     useEffect(() => {
-        const fetchCourses = async () => {
-            try {
-                //const response = await axios.get('/courses.json');
-                //setCourses(response.data);
-                const response = await fetch('/courses.json');
-                const jsonData = await response.json();
-                setCourses(jsonData);
-            } catch (error) {
-                console.error(error)
-            }
-        }
-
-        fetchCourses()
+        fetch(`http://localhost:8080/search`)
+            .then(response => response.json())
+            .then(data => setCourses(data))
+            .catch(error => console.error('Error fetching courses:', error));
     }, [])
 
     return (
@@ -28,6 +19,5 @@ export const ItemListContainer = () => {
         })}
         {console.log(courses)} */}
         </>
-
     )
 }

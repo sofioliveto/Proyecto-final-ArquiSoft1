@@ -15,22 +15,22 @@ const Item = ({ course }) => {
             <Image
                 objectFit='cover'
                 maxW={{ base: '100%', sm: '200px' }}
-                src='https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60'
+                src={course.url_image}
                 alt='Caffe Latte'
             />
 
             <Stack>
                 <CardBody>
-                    <Heading size='md'>{course.Nombre}</Heading>
+                    <Heading size='md'>{course.nombre}</Heading>
 
                     <Text py='2'>
-                        {course.Descripcion}
+                        {course.descripcion}
                     </Text>
                     <Text py='2'>
-                        <img src="/estrella.png" alt="estrella" width="20px" height="20px"/>{course.Valoracion}/5
+                        <img src="/estrella.png" alt="estrella" width="20px" height="20px"/>{course.valoracion}/5
                     </Text>
                     <Text py='2'>
-                        {course.Categoria}
+                        {course.categoria}
                     </Text>
                 </CardBody>
 
