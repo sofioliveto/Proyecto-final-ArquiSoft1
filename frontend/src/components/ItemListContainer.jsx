@@ -1,23 +1,30 @@
+// src/components/ItemListContainer.jsx
 import React, { useState, useEffect } from 'react';
 import ItemList from './ItemList';
+import SearchBar from './SearchBar';
 
 export const ItemListContainer = () => {
     const [courses, setCourses] = useState([]);
+    const [filteredCourses, setFilteredCourses] = useState([]);
 
     useEffect(() => {
         fetch(`http://localhost:8080/search`)
             .then(response => response.json())
-            .then(data => setCourses(data))
+            .then(data => {
+                setCourses(data);
+                setFilteredCourses(data);
+            })
             .catch(error => console.error('Error fetching courses:', error));
-    }, [])
+    }, []);
+
+    const handleSearchResults = (results) => {
+        setFilteredCourses(results);
+    };
 
     return (
-        <>
-            <ItemList courses={courses} />
-            {/* {courses.map((c) => {
-            console.log(c)
-        })}
-        {console.log(courses)} */}
-        </>
-    )
-}
+        <div>
+            <SearchBar onSearchResults={handleSearchResults} />
+            <ItemList courses={filteredCourses} />
+        </div>
+    );
+};

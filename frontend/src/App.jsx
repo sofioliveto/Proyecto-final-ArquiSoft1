@@ -12,7 +12,7 @@ function App() {
         <header>
           <Navbar />
         </header>
-          <SearchBar/>
+
         <ItemListContainer/>
       </>
     </ChakraProvider>
