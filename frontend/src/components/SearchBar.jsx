@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { Input, InputGroup, InputLeftElement, Box, Button } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import React from "react";
+import '../estilos/SearchBar.css'
 
 const SearchBar = ({ onSearchResults }) => {
     const [searchTerm, setSearchTerm] = React.useState('');
@@ -57,20 +58,21 @@ const SearchBar = ({ onSearchResults }) => {
     };
 
     return (
-        <Box width="100%" maxW="md" mx="auto" mt={4}>
+        <Box className='search' id='caja'>
             <form onSubmit={handleSearch}>
                 <InputGroup>
                     <InputLeftElement pointerEvents="none">
-                        <SearchIcon color="gray.300" />
+                        <SearchIcon id='icono' />
                     </InputLeftElement>
                     <Input
+                        className='input'
                         type="text"
                         placeholder="Buscar cursos por nombre..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </InputGroup>
-                <Button type="submit" mt={2} width="100%">Buscar</Button>
+                {/*<Button type="submit" mt={2} width="100%">Buscar</Button>*/}
             </form>
         </Box>
     );

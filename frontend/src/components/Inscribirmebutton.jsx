@@ -1,12 +1,12 @@
 import '../estilos/Inscribirmebutton.css';
-import {useParams} from "react-router-dom";
+import React from "react";
 import Cookies from "js-cookie";
 
-const CursoInscr=()=> {
-  const {id} = useParams();
+const Inscribirmebutton = ({courseId }) => {
   const user_id = Number(Cookies.get('user_id'));
  // const [isAdmin, SetIsAdmin] = useState(false);
   const tokenUser = Cookies.get('token');
+
 
 
   const handleSubmit = async (e) => {
@@ -38,13 +38,14 @@ const CursoInscr=()=> {
           },
           body: JSON.stringify({
             fecha_inscripcion: currentDate,
-            id_course: id,
+            id_course: courseId,
             id_user:user_id
           }),
         });
 
         if (response.ok) {
           alert("Inscripción exitosa! :)")
+
         }
       } catch (error) {
         console.log('Error al realizar la solicitud al backend:', error);
@@ -60,4 +61,4 @@ const CursoInscr=()=> {
           </button>
     );
 }
-  export default CursoInscr;
+export default Inscribirmebutton;

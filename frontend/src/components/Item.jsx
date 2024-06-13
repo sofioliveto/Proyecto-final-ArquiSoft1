@@ -6,6 +6,8 @@ import React from "react";
 
 
 const Item = ({ course }) => {
+
+
     return (
         <Card
             direction={{ base: 'column', sm: 'row' }}
@@ -16,26 +18,26 @@ const Item = ({ course }) => {
                 objectFit='cover'
                 maxW={{ base: '100%', sm: '200px' }}
                 src={course.url_image}
-                alt='Imagen Curso'
+                alt='Imagen Curso'git
             />
 
             <Stack>
-                <CardBody>
-                    <Heading size='md'>{course.nombre}</Heading>
+                <CardBody className='body'>
+                    <Heading className="card-heading">{course.nombre}</Heading>
 
-                    <Text py='2'>
+                    <Text py='2' className="card-text">
                         {course.descripcion}
                     </Text>
-                    <Text py='2'>
-                    {course.categoria}
+                    <Text py='2' className="card-text">
+                        {course.categoria}
                     </Text>
-                    <Text py='2' display='flex' alignItems='center'>
+                    <Text py='2' display='flex' alignItems='center' className="card-text">
                         <img src="/estrella.png" alt="estrella" width="20px" height="20px" style={{ marginRight: '5px' }}/>
                         {course.valoracion}/5
                     </Text>
                 </CardBody>
                 <CardFooter>
-                    <Inscribirmebutton/>
+                    <Inscribirmebutton courseId={course.course_id} />
                 </CardFooter>
             </Stack>
         </Card>

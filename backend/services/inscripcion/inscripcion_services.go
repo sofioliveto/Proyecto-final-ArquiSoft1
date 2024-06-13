@@ -25,6 +25,7 @@ func init() {
 }
 
 func (s *inscripService) InsertInscr(inscripDto dto.InscripcionDto) (dto.InscripcionDto, errores.ApiError) {
+
 	var inscripcion model.Users_x_courses
 
 	inscripcion.Users_x_courses_id = inscripDto.Id_inscripcion
