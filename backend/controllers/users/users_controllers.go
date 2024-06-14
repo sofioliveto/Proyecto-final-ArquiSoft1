@@ -35,7 +35,6 @@ func GetUserById(c *gin.Context) {
 func Login(c *gin.Context) {
 	var loginDto dto.LoginDto
 	er := c.BindJSON(&loginDto)
-
 	if er != nil {
 		log.Error(er.Error())
 		c.JSON(http.StatusBadRequest, er.Error())
@@ -43,7 +42,6 @@ func Login(c *gin.Context) {
 	}
 
 	tokenDto, err := service.UserService.Login(loginDto)
-
 	if err != nil {
 		c.JSON(err.Status(), err)
 		return

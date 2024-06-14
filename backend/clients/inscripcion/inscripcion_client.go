@@ -8,7 +8,6 @@ import (
 
 func InsertInscr(inscripcion model.Users_x_courses) (model.Users_x_courses, error) {
 	result := clients.Db.Create(&inscripcion)
-
 	if result.Error != nil {
 		log.Error("Error al crear la inscripción: ", result.Error)
 		return inscripcion, result.Error // Devuelve el error real

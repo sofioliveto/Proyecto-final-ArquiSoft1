@@ -46,7 +46,6 @@ func (s *inscripService) InsertInscr(inscripDto dto.InscripcionDto) (dto.Inscrip
 
 	// Inserta la inscripción en la base de datos
 	inscripcion, err := inscripcionClient.InsertInscr(inscripcion)
-
 	if err != nil {
 		return inscripDto, errores.NewInternalServerApiError("Error al insertar inscripción", err)
 	}
