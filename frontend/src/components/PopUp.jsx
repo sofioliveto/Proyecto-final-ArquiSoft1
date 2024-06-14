@@ -14,7 +14,7 @@ const Popup = ({ isOpen, onClose }) => {
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Iniciar sesión</ModalHeader>
+                <ModalHeader style={{fontFamily: 'Spoof Trial, sans-serif'}}>Inicio de sesión</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <Login onClose={onClose} />

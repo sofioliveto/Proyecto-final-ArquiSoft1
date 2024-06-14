@@ -15,9 +15,10 @@ const PasswordInput = ({ password, setPassword }) => {
                 placeholder='Ingrese su contraseña...'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                style={{ border:'2px solid black', fontFamily: 'Spoof Trial, sans-serif'}}
             />
             <InputRightElement width='4.5rem'>
-                <Button h='1.75rem' size='sm' onClick={handleClick}>
+                <Button h='1.75rem' size='sm' onClick={handleClick} style={{fontFamily: 'Spoof Trial, sans-serif'}}>
                     {show ? 'Ocultar' : 'Mostrar'}
                 </Button>
             </InputRightElement>
@@ -79,11 +80,11 @@ const Login = ({ onClose }) => {
     return (
         <form id="formLogin" onSubmit={handleSubmit}>
             <Input
-                className='inputEmail'
                 id={'inputEmailLogin'}
                 placeholder="Ingrese su correo electrónico..."
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                style={{ border:'2px solid black', fontFamily: 'Spoof Trial, sans-serif'}}
             />
             <PasswordInput password={password} setPassword={setPassword} />
             <Button colorScheme="blue" mr={3} type="submit" onClick={onClose}>

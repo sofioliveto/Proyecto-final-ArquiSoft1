@@ -33,12 +33,12 @@ const BurgerMenu = () => {
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerCloseButton />
-                    <DrawerHeader>Menú</DrawerHeader>
+                    <DrawerHeader style={{fontFamily: 'Spoof Trial, sans-serif'}}>Menú</DrawerHeader>
                     <DrawerBody>
                         <VStack spacing={4}>
-                            <Button w="100%" onClick={onOpenPopup} mr={3}>Iniciar sesión</Button>
+                            <Button w="100%" onClick={onOpenPopup} style={{fontFamily: 'Spoof Trial, sans-serif'}}>Iniciar sesión</Button>
                             {userId ? (
-                                <Button w="100%">Cerrar sesión</Button>
+                                <Button w="100%" style={{fontFamily: 'Spoof Trial, sans-serif'}}>Cerrar sesión</Button>
                             ) : (
                                 <h1>Inicia sesión para continuar</h1>
                             )}

@@ -16,9 +16,9 @@ export const Navbar = () => {
         </div>
         <div>
           {userId ? (
-              <h1>Bienvenido, Usuario</h1>
+              <h1 style={{fontFamily: 'Spoof Trial, sans-serif'}}>Bienvenido, Usuario</h1>
           ) : (
-              <h1>Inicia sesión para continuar</h1>
+              <h1 style={{fontFamily: 'Spoof Trial, sans-serif'}}>Inicia sesión para continuar</h1>
           )}
         </div>
         <div className='menu'>
