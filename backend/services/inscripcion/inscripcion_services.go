@@ -28,11 +28,13 @@ func (s *inscripService) InsertInscr(inscripDto dto.InscripcionDto) (dto.Inscrip
 
 	var inscripcion model.Users_x_courses
 
+	// Asigna valores desde inscripDto a inscripcion
 	inscripcion.Users_x_courses_id = inscripDto.Id_inscripcion
 	inscripcion.User_id = inscripDto.Id_user
 	inscripcion.Course_id = inscripDto.Id_course
 	inscripcion.Fecha_inscripcion = time.Now()
 
+	// Verifica si el usuario existe
 	_, er := users.UserClient.GetUserById(inscripDto.Id_user)
 	if er != nil {
 		// Verificar si el error es un NotFoundApiError
@@ -42,12 +44,14 @@ func (s *inscripService) InsertInscr(inscripDto dto.InscripcionDto) (dto.Inscrip
 		return inscripDto, errores.NewInternalServerApiError("Error al obtener usuario", er)
 	}
 
+	// Inserta la inscripción en la base de datos
 	inscripcion, err := inscripcionClient.InsertInscr(inscripcion)
 
 	if err != nil {
 		return inscripDto, errores.NewInternalServerApiError("Error al insertar inscripción", err)
 	}
 
+	// Prepara el objeto de respuesta
 	var inscResponseDto dto.InscripcionDto
 	inscResponseDto.Id_inscripcion = inscripcion.Users_x_courses_id
 	inscResponseDto.Id_user = inscripcion.User_id

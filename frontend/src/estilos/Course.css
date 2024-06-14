@@ -11,12 +11,9 @@
     flex-direction: column;
   }
 
-body{
-    font-family:'Spoof Trial', sans-serif;
-}
-
 .card-heading{
     font-family: 'Spoof Trial', sans-serif;
+    font-weight: 600;
     size: auto;
 }
 

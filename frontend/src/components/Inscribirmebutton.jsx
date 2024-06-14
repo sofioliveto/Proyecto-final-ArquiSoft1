@@ -1,12 +1,13 @@
 import '../estilos/Inscribirmebutton.css';
-import React from "react";
+import React, {useState} from "react";
 import Cookies from "js-cookie";
 
+
 const Inscribirmebutton = ({courseId }) => {
-  const user_id = Number(Cookies.get('user_id'));
+  let [user_id] = useState(Cookies.get('user_id')); // Obtener el estado de inicio de sesión desde la cookie
+  user_id = Number(user_id);
  // const [isAdmin, SetIsAdmin] = useState(false);
   const tokenUser = Cookies.get('token');
-
 
 
   const handleSubmit = async (e) => {
@@ -46,6 +47,8 @@ const Inscribirmebutton = ({courseId }) => {
         if (response.ok) {
           alert("Inscripción exitosa! :)")
 
+        }else if(response.status===500){
+          alert("Ya estas inscripto a este curso")
         }
       } catch (error) {
         console.log('Error al realizar la solicitud al backend:', error);

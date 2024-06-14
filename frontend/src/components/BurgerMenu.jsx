@@ -1,4 +1,3 @@
-import React from 'react';
 import {
     Box,
     IconButton,
@@ -16,10 +15,19 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 import Popup from "./PopUp.jsx";
 import Cookies from "js-cookie";
 
-const BurgerMenu = () => {
+const BurgerMenu = ({ onLogout }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isPopupOpen, onOpen: onOpenPopup, onClose: onClosePopup } = useDisclosure();
     const userId = Cookies.get('user_id');
+
+    const handleLogout = () => {
+        Cookies.remove('user_id');
+        Cookies.remove('email');
+        Cookies.remove('token');
+        Cookies.remove('type');
+        onLogout(); // Llama a la función de actualización pasada como prop
+        console.log("cookies borradas");
+    };
 
     return (
         <Box p={4}>
@@ -38,9 +46,9 @@ const BurgerMenu = () => {
                         <VStack spacing={4}>
                             <Button w="100%" onClick={onOpenPopup} style={{fontFamily: 'Spoof Trial, sans-serif'}}>Iniciar sesión</Button>
                             {userId ? (
-                                <Button w="100%" style={{fontFamily: 'Spoof Trial, sans-serif'}}>Cerrar sesión</Button>
+                                <Button w="100%" onClick={handleLogout} style={{fontFamily: 'Spoof Trial, sans-serif'}}>Cerrar sesión</Button>
                             ) : (
-                                <h1>Inicia sesión para continuar</h1>
+                                <h1> </h1>
                             )}
                         </VStack>
                     </DrawerBody>
@@ -50,7 +58,6 @@ const BurgerMenu = () => {
         </Box>
     );
 };
-
 
 
 export default BurgerMenu;

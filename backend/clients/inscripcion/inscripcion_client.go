@@ -10,9 +10,14 @@ func InsertInscr(inscripcion model.Users_x_courses) (model.Users_x_courses, erro
 	result := clients.Db.Create(&inscripcion)
 
 	if result.Error != nil {
-		log.Error("")
+		log.Error("Error al crear la inscripción: ", result.Error)
+		return inscripcion, result.Error // Devuelve el error real
 	}
+
+	// Registra un mensaje de depuración con el ID de la inscripción creada
 	log.Debug("Inscripcion creada: ", inscripcion.Users_x_courses_id)
+
+	// Devuelve la inscripción creada y nil como error (indicando éxito)
 	return inscripcion, nil
 
 }

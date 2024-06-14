@@ -2,9 +2,9 @@
     border-radius: 8px;
     background-color: black; /* Fondo negro */
     width: 35%; /* 1/6 de la pantalla */
-    margin-top: 5px; /* Centra el contenedor verticalmente y añade márgenes arriba y abajo */
+    margin-top: 15px; /* Centra el contenedor verticalmente y añade márgenes arriba y abajo */
     margin-left: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
 }
 
 .input {
