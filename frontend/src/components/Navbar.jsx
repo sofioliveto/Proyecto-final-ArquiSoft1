@@ -8,6 +8,7 @@ export const Navbar = () => {
 
   const handleLogout = () => {
     setUserId(null); // Actualizar el estado cuando se cierre la sesión
+    window.location.reload(); //Recargo la pagina porque sino no me sigue dejando inscribirme a cursos
   };
 
   return (

@@ -1,5 +1,5 @@
 // src/components/ItemListContainer.jsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import ItemList from './ItemList';
 import SearchBar from './SearchBar';
 
