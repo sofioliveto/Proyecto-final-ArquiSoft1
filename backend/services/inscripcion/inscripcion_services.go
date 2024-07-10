@@ -1,7 +1,6 @@
 package inscripcion
 
 import (
-	inscripcionClient "backend/clients/inscripcion"
 	"backend/clients/users"
 	"backend/dto"
 	errores "backend/extras"
@@ -14,6 +13,8 @@ type inscripService struct{}
 
 type inscrServiceInterface interface {
 	InsertInscr(inscripDto dto.InscripcionDto) (dto.InscripcionDto, errores.ApiError)
+	GetInscripcion() (dto.InscripcionDto, errores.ApiError)
+	GetCourseByUserId(inscrpcionDto dto.InscripcionDto) (dto.InscripcionDto, errores.ApiError)
 }
 
 var (
@@ -45,7 +46,7 @@ func (s *inscripService) InsertInscr(inscripDto dto.InscripcionDto) (dto.Inscrip
 	}
 
 	// Inserta la inscripción en la base de datos
-	inscripcion, err := inscripcionClient.InsertInscr(inscripcion)
+	inscripcion, err := InscripcionClient.InsertInscr(inscripcion)
 	if err != nil {
 		return inscripDto, errores.NewInternalServerApiError("Error al insertar inscripción", err)
 	}

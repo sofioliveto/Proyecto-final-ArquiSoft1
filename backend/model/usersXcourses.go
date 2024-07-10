@@ -8,4 +8,4 @@ type Users_x_courses struct {
 	Course_id          int       `gorm:"foreignKey:Course_id"`
 	Fecha_inscripcion  time.Time `gorm:"type:date;not null"`
 }
-type userss_x_coursess []Users_x_courses
+type Userss_x_coursess []Users_x_courses
