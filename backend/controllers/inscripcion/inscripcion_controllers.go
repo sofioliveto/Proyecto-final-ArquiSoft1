@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"net/http"
+	"strconv"
 )
 
 func InsertInscr(c *gin.Context) {
@@ -32,4 +33,35 @@ func InsertInscr(c *gin.Context) {
 
 	// Si la inserción fue exitosa, envía una respuesta 201 Created con los datos de la inscripción
 	c.JSON(http.StatusCreated, inscrDto)
+}
+
+// GetInscripcion maneja la obtención de todas las inscripciones
+func GetInscripcion(c *gin.Context) {
+	inscrsDto, err := serviceInscr.InscripcionService.GetInscripcion()
+	if err != nil {
+		log.Error("Error al obtener inscripciones: ", err.Error())
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	// Envía una respuesta 200 OK con los datos de las inscripciones
+	c.JSON(http.StatusOK, inscrsDto)
+}
+
+// GetCourseByUserId maneja la obtención de cursos por ID de usuario
+func GetCourseByUserId(c *gin.Context) {
+	userId := c.Param("user_id")
+
+	var inscrDto dto.InscripcionDto
+	inscrDto.Id_user, _ = strconv.Atoi(userId)
+
+	inscrsDto, err := serviceInscr.InscripcionService.GetCourseByUserId(inscrDto)
+	if err != nil {
+		log.Error("Error al obtener cursos por ID de usuario: ", err.Error())
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	// Envía una respuesta 200 OK con los datos de los cursos del usuario
+	c.JSON(http.StatusOK, inscrsDto)
 }
