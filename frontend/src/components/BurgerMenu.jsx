@@ -14,18 +14,38 @@ import {
 import { HamburgerIcon } from "@chakra-ui/icons";
 import Popup from "./PopUp.jsx";
 import Cookies from "js-cookie";
+import { useState, useEffect } from "react";
 
 const BurgerMenu = ({ onLogout }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isPopupOpen, onOpen: onOpenPopup, onClose: onClosePopup } = useDisclosure();
-    const userId = Cookies.get('user_id');
+    const [userId, setUserId] = useState(null);
+    const [admin, setAdmin]=useState(null)
+
+    useEffect(() => {
+        const storedUserId = Cookies.get('user_id');
+        const storedAdmin = Cookies.get('admin');
+
+        console.log("storedUserId:", storedUserId); // Añade esta línea
+        console.log("storedAdmin:", storedAdmin);   // Añade esta línea
+
+        if (storedUserId) {
+            setUserId(parseInt(storedUserId, 10));
+        }
+        console.log("Stored Admin:", storedAdmin);
+        if (storedAdmin) {
+            setAdmin(storedAdmin === "1"); // Convert to boolean
+        }
+    }, [isPopupOpen]);
 
     const handleLogout = () => {
         Cookies.remove('user_id');
         Cookies.remove('email');
         Cookies.remove('token');
-        Cookies.remove('type');
-        onLogout(); // Llama a la función de actualización pasada como prop
+        Cookies.remove('admin');
+        setUserId(null);
+        setAdmin(null)
+        onLogout();
         console.log("cookies borradas");
     };
 
@@ -44,11 +64,21 @@ const BurgerMenu = ({ onLogout }) => {
                     <DrawerHeader style={{fontFamily: 'Spoof Trial, sans-serif'}}>Menú</DrawerHeader>
                     <DrawerBody>
                         <VStack spacing={4}>
-                            <Button w="100%" onClick={onOpenPopup} style={{fontFamily: 'Spoof Trial, sans-serif'}}>Iniciar sesión</Button>
                             {userId ? (
-                                <Button w="100%" onClick={handleLogout} style={{fontFamily: 'Spoof Trial, sans-serif'}}>Cerrar sesión</Button>
+                                <>
+                                    <Button w="100%" onClick={handleLogout} style={{fontFamily: 'Spoof Trial, sans-serif'}}>Cerrar sesión</Button>
+                                    {admin ? (
+                                        <>
+                                            <Button w="100%" style={{fontFamily: 'Spoof Trial, sans-serif'}}>Crear curso</Button>
+                                            <Button w="100%" style={{fontFamily: 'Spoof Trial, sans-serif'}}>Editar curso</Button>
+                                            <Button w="100%" style={{fontFamily: 'Spoof Trial, sans-serif'}}>Eliminar curso</Button>
+                                        </>
+                                    ) : (
+                                        <Button w="100%" style={{fontFamily: 'Spoof Trial, sans-serif'}}>Mis cursos</Button>
+                                    )}
+                                </>
                             ) : (
-                                <h1> </h1>
+                                <Button w="100%" onClick={onOpenPopup} style={{fontFamily: 'Spoof Trial, sans-serif'}}>Iniciar sesión</Button>
                             )}
                         </VStack>
                     </DrawerBody>
@@ -58,6 +88,5 @@ const BurgerMenu = ({ onLogout }) => {
         </Box>
     );
 };
-
 
 export default BurgerMenu;

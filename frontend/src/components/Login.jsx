@@ -54,21 +54,21 @@ const Login = ({ onClose }) => {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({ email, password }),
-                }).then((response) => {
-                    if (response.ok) {
-                        return response.json();
-
-                    } else {
-                        alert("Usuario no registrado");
-                    }
                 });
 
-                if (response.id_user) {
-                    Cookies.set('user_id', response.id_user);
-                    Cookies.set('email', email);
-                    Cookies.set('token', response.token);
-                    Cookies.set('type', response.admin);
-                    window.location.reload();
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Respuesta del servidor:', data);
+
+                    if (data.id_user) {
+                        Cookies.set('user_id', data.id_user);
+                        Cookies.set('email', email);
+                        Cookies.set('token', data.token);
+                        Cookies.set('admin', data.admin ? "1" : "0");
+                        window.location.reload();
+                    }
+                } else {
+                    alert("Usuario no registrado o Contraseña incorrecta");
                 }
             } catch (error) {
                 Cookies.set('user_id', "-1");

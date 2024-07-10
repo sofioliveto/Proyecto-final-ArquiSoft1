@@ -9,7 +9,6 @@ const SearchBar = ({ onSearchResults }) => {
 
     const handleSearch = async (e) => {
         e.preventDefault();
-
         if (searchTerm.trim() === '') {
             // If the search term is empty, fetch all courses
             try {

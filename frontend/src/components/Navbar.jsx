@@ -1,15 +1,32 @@
 import BurgerMenu from './BurgerMenu'
 import Cookies from 'js-cookie';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import '../estilos/Navbar.css';
 
 export const Navbar = () => {
-  const [userId, setUserId] = useState(Cookies.get('user_id')); // Obtener el estado de inicio de sesión desde la cookie
+  const [userId, setUserId] = useState(null); // Inicialmente null
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const storedUserId = Cookies.get('user_id');
+    if (storedUserId) {
+      setUserId(parseInt(storedUserId, 10));
+    }
+
+    const storedAdmin = Cookies.get('admin');
+    if (storedAdmin) {
+      setIsAdmin(storedAdmin === "1"); // Convert to boolean
+    }
+  }, []);
 
   const handleLogout = () => {
     setUserId(null); // Actualizar el estado cuando se cierre la sesión
-    window.location.reload(); //Recargo la pagina porque sino no me sigue dejando inscribirme a cursos
+    window.location.reload(); //Recargo la pagina porque sino me sigue dejando inscribirme a cursos
   };
+
+
+  const validUserId = typeof userId === 'number' ? userId : parseInt(userId, 10);
+
 
   return (
       <header>
@@ -21,14 +38,16 @@ export const Navbar = () => {
             Coffee&Learn
           </div>
           <div id='welcomeMessage'>
-            {userId ? (
-                <h1 style={{fontFamily: 'Spoof Trial, sans-serif'}}>Bienvenid@!</h1>
-            ) : (
-                <h1 style={{fontFamily: 'Spoof Trial, sans-serif'}}>Inicia sesión para inscribirte a cursos!</h1>
-            )}
+            <h1 style={{fontFamily: 'Spoof Trial, sans-serif'}}>
+              {validUserId ? (
+                  isAdmin ? 'Bienvenido administrador' : 'Bienvenido alumno'
+              ) : (
+                  'Inicie sesión'
+              )}
+            </h1>
           </div>
           <div className='menu'>
-            <BurgerMenu onLogout={handleLogout} />
+            <BurgerMenu onLogout={handleLogout}/>
           </div>
         </div>
       </header>
