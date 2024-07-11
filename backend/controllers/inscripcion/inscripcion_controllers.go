@@ -50,7 +50,7 @@ func GetInscripcion(c *gin.Context) {
 
 // GetCourseByUserId maneja la obtención de cursos por ID de usuario
 func GetCourseByUserId(c *gin.Context) {
-	userId := c.Param("user_id")
+	userId := c.Param("id_user")
 
 	var inscrDto dto.InscripcionDto
 	inscrDto.Id_user, _ = strconv.Atoi(userId)

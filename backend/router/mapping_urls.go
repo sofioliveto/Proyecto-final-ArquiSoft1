@@ -19,6 +19,6 @@ func mapUrls() {
 	//inscripcion mapping
 	router.POST("/inscripcion", controllers_inscripcion.InsertInscr)
 	router.GET("/inscripciones", controllers_inscripcion.GetInscripcion)
-	router.GET("/inscripciones/:id", controllers_inscripcion.GetCourseByUserId)
+	router.GET("/inscripciones/:id_user", controllers_inscripcion.GetCourseByUserId)
 
 }
