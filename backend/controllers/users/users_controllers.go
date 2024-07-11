@@ -48,3 +48,22 @@ func Login(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, tokenDto)
 }
+
+func CreateUser(s *gin.Context) {
+	var user dto.UserDto
+	err := s.BindJSON(&user)
+	if err != nil {
+		log.Error("Error al parsear el JSON: ", err.Error())
+		s.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	user, er := service.UserService.CreateUser(user)
+	if er != nil {
+		log.Error("Error al registrar el usuario: ", er.Error())
+		s.JSON(http.StatusInternalServerError, er.Error())
+		return
+	}
+
+	s.JSON(http.StatusCreated, user)
+}

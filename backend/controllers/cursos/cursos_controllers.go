@@ -4,6 +4,7 @@ import (
 	"backend/dto"
 	servicios "backend/services/cursos"
 	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"strconv"
 )
@@ -49,4 +50,57 @@ func GetCoursesByName(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, coursesDto)
+}
+
+func InsertCourse(c *gin.Context) {
+	var course dto.CourseDto
+	err := c.BindJSON(&course)
+	if err != nil {
+		log.Error("Error al parsear el JSON: ", err.Error())
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	course, er := servicios.CourseService.InsertCourse(course)
+	if er != nil {
+		log.Error("Error al crear curso: ", er.Error())
+		c.JSON(http.StatusInternalServerError, er.Error())
+		return
+	}
+
+	c.JSON(http.StatusCreated, course)
+}
+
+func EditCourse(c *gin.Context) {
+	var course dto.CourseDto
+	id, _ := strconv.Atoi(c.Param("course_id"))
+
+	err := c.BindJSON(&course)
+	if err != nil {
+		log.Error("Error al parsear el JSON: ", err.Error())
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	updatedCourse, er := servicios.CourseService.EditCourse(id, course)
+	if er != nil {
+		log.Error("Error al editar curso: ", er.Error())
+		c.JSON(http.StatusInternalServerError, er.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, updatedCourse)
+}
+
+func DeleteCourse(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("course_id"))
+
+	courseDto, err := servicios.CourseService.DeleteCourse(id)
+	if err != nil {
+		log.Error("Error al eliminar curso: ", err.Error())
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, courseDto)
 }

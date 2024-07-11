@@ -20,13 +20,8 @@ var (
 type userServiceInterface interface {
 	GetUserById(id int) (dto.UserDto, errores.ApiError)
 	Login(loginDto dto.LoginDto) (dto.TokenDto, errores.ApiError)
+	CreateUser(registro dto.UserDto) (dto.UserDto, errores.ApiError)
 }
-
-/*func initUserService(userClient users.UserClientInterface) userServiceInterface {
-	service := new(userService)
-	service.userClient = userClient
-	return service
-}*/
 
 func init() {
 	UserService = &userService{}
@@ -83,5 +78,33 @@ func (s *userService) Login(loginDto dto.LoginDto) (dto.TokenDto, errores.ApiErr
 	} else {
 		return tokenDto, errores.NewBadRequestApiError("Contraseña incorrecta")
 	}
+}
 
+func (s *userService) CreateUser(registro dto.UserDto) (dto.UserDto, errores.ApiError) {
+	var nuevo model.Users
+
+	nuevo.Nombre = registro.Nombre
+	nuevo.Apellido = registro.Apellido
+	nuevo.Email = registro.Email
+
+	// Hash MD5 de la contraseña
+	var pswMd5 = md5.Sum([]byte(registro.Password))
+	nuevo.Password = hex.EncodeToString(pswMd5[:])
+
+	nuevo.Admin = registro.Admin
+
+	nuevo, err := users.UserClient.CreateUser(nuevo)
+	if err != nil {
+		return dto.UserDto{}, errores.NewInternalServerApiError("Error al crear el usuario", err)
+	}
+	var registroResponse dto.UserDto
+
+	registroResponse.User_id = nuevo.User_id
+	registroResponse.Nombre = nuevo.Nombre
+	registroResponse.Apellido = nuevo.Apellido
+	registroResponse.Email = nuevo.Email
+	registroResponse.Password = nuevo.Password
+	registroResponse.Admin = nuevo.Admin
+
+	return registroResponse, nil
 }
