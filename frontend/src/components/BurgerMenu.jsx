@@ -13,12 +13,14 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import Popup from "./PopUp.jsx";
+import PopupCreate from "./PopUpCreate.jsx";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 
 const BurgerMenu = ({ onLogout, onMyCourses }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isPopupOpen, onOpen: onOpenPopup, onClose: onClosePopup } = useDisclosure();
+    const { isOpen: isPopupOpenCreate, onOpen: onOpenPopupCreate, onClose: onClosePopupCreate } = useDisclosure();
     const [userId, setUserId] = useState(null);
     const [admin, setAdmin] = useState(null);
 
@@ -71,7 +73,7 @@ const BurgerMenu = ({ onLogout, onMyCourses }) => {
                                 <>
                                     <Button w="100%" onClick={handleLogout} style={{fontFamily: 'Spoof Trial, sans-serif'}}>Cerrar sesión</Button>
                                     {admin ? (
-                                        <Button w="100%" style={{fontFamily: 'Spoof Trial, sans-serif'}}>Crear curso</Button>
+                                        <Button w="100%" onClick={onOpenPopupCreate} style={{fontFamily: 'Spoof Trial, sans-serif'}}>Crear curso</Button>
                                     ) : (
                                         <Button w="100%" onClick={handleMyCourses} style={{fontFamily: 'Spoof Trial, sans-serif'}}>Mis cursos</Button>
                                     )}
@@ -83,7 +85,8 @@ const BurgerMenu = ({ onLogout, onMyCourses }) => {
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
-            <Popup isOpen={isPopupOpen} onClose={onClosePopup} />
+            <Popup isOpen={isPopupOpen} onClose={onClosePopup}/>
+            <PopupCreate isOpen={isPopupOpenCreate} onClose={onClosePopupCreate} />
         </Box>
     );
 };

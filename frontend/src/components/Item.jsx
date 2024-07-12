@@ -1,13 +1,32 @@
-import { Card, CardBody, CardFooter, Text, Stack, Image } from '@chakra-ui/react';
+import {Card, CardBody, CardFooter, Text, Stack, Image, Button} from '@chakra-ui/react';
 import '../estilos/Course.css';
 import Inscribirmebutton from "./Inscribirmebutton.jsx";
+import Cookies from "js-cookie";
+import {useEffect, useState} from "react";
 
 const Item = ({ course }) => {
+    const [userId, setUserId] = useState(null); // Inicialmente null
+    const [isAdmin, setIsAdmin] = useState(false);
+
     const formattedDate = new Date(course.fecha_inicio).toLocaleDateString('es-ES', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
     });
+
+    const validUserId = typeof userId === 'number' ? userId : parseInt(userId, 10);
+
+    useEffect(() => {
+        const storedUserId = Cookies.get('user_id');
+        if (storedUserId) {
+            setUserId(parseInt(storedUserId, 10));
+        }
+
+        const storedAdmin = Cookies.get('admin');
+        if (storedAdmin) {
+            setIsAdmin(storedAdmin === "1"); // Convert to boolean
+        }
+    }, []);
 
     const getProfesorName = (profesor_id) => {
         const profesores = {
@@ -62,7 +81,17 @@ const Item = ({ course }) => {
                     </Text>
                 </CardBody>
                 <CardFooter>
-                    <Inscribirmebutton courseId={course.course_id} />
+                    {validUserId ? (
+                        isAdmin ? (
+                            <>
+                                <Button w="100%" style={{fontFamily: 'Spoof Trial, sans-serif'}}>Editar curso</Button>
+                                <Button w="100%" style={{fontFamily: 'Spoof Trial, sans-serif'}}>Eliminar curso</Button>
+                            </>
+                        ) : (
+                            <Inscribirmebutton courseId={course.course_id} />
+                        )
+                    ) : null}
+
                 </CardFooter>
             </Stack>
         </Card>
