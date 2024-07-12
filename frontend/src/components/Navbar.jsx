@@ -1,11 +1,16 @@
-import BurgerMenu from './BurgerMenu'
+import BurgerMenu from './BurgerMenu';
 import Cookies from 'js-cookie';
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import '../estilos/Navbar.css';
 
-export const Navbar = () => {
-  const [userId, setUserId] = useState(null); // Inicialmente null
+const Navbar = () => {
+  const [userId, setUserId] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [courses, setCourses] = useState([]);
+  const [userCourses, setUserCourses] = useState([]);
+  const [filteredCourses, setFilteredCourses] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showMyCourses, setShowMyCourses] = useState(false);
 
   useEffect(() => {
     const storedUserId = Cookies.get('user_id');
@@ -15,18 +20,45 @@ export const Navbar = () => {
 
     const storedAdmin = Cookies.get('admin');
     if (storedAdmin) {
-      setIsAdmin(storedAdmin === "1"); // Convert to boolean
+      setIsAdmin(storedAdmin === "1");
     }
   }, []);
 
-  const handleLogout = () => {
-    setUserId(null); // Actualizar el estado cuando se cierre la sesión
-    window.location.reload(); //Recargo la pagina porque sino me sigue dejando inscribirme a cursos
+  const fetchCourseDetails = async (courseId) => {
+    const response = await fetch(`http://localhost:8080/courses/${courseId}`);
+    const courseData = await response.json();
+    return courseData;
   };
 
+  const handleMyCourses = async (userId) => {
+    setLoading(true);
+    try {
+      const response = await fetch(`http://localhost:8080/inscripciones/${userId}`);
+      const inscripciones = await response.json();
+      const courseDetailsPromises = inscripciones.map((inscripcion) => fetchCourseDetails(inscripcion.id_course));
+      const courseDetails = await Promise.all(courseDetailsPromises);
+      setCourses(courseDetails);
+      setFilteredCourses(courseDetails);
+      setShowMyCourses(true);
+    } catch (error) {
+      console.error('Error fetching user courses:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    Cookies.remove('user_id');
+    Cookies.remove('email');
+    Cookies.remove('token');
+    Cookies.remove('admin');
+    setUserId(null);
+    setIsAdmin(false);
+    setUserCourses([]);
+    window.location.reload();
+  };
 
   const validUserId = typeof userId === 'number' ? userId : parseInt(userId, 10);
-
 
   return (
       <header>
@@ -38,7 +70,7 @@ export const Navbar = () => {
             Coffee&Learn
           </div>
           <div id='welcomeMessage'>
-            <h1 style={{fontFamily: 'Spoof Trial, sans-serif'}}>
+            <h1 style={{ fontFamily: 'Spoof Trial, sans-serif' }}>
               {validUserId ? (
                   isAdmin ? 'Bienvenido administrador' : 'Bienvenido alumno'
               ) : (
@@ -47,9 +79,11 @@ export const Navbar = () => {
             </h1>
           </div>
           <div className='menu'>
-            <BurgerMenu onLogout={handleLogout}/>
+            <BurgerMenu onLogout={handleLogout} onMyCourses={handleMyCourses} />
           </div>
         </div>
       </header>
   );
-}
+};
+
+export { Navbar };

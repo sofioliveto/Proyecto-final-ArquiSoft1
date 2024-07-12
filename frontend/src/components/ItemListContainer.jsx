@@ -6,6 +6,7 @@ export const ItemListContainer = () => {
     const [courses, setCourses] = useState([]);
     const [filteredCourses, setFilteredCourses] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [showMyCourses, setShowMyCourses] = useState(false);
 
     useEffect(() => {
         fetch(`http://localhost:8080/search`)
