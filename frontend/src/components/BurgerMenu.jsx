@@ -16,25 +16,22 @@ import Popup from "./PopUp.jsx";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 
-const BurgerMenu = ({ onLogout }) => {
+const BurgerMenu = ({ onLogout, onMyCourses }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isPopupOpen, onOpen: onOpenPopup, onClose: onClosePopup } = useDisclosure();
     const [userId, setUserId] = useState(null);
-    const [admin, setAdmin]=useState(null)
+    const [admin, setAdmin] = useState(null);
 
     useEffect(() => {
         const storedUserId = Cookies.get('user_id');
         const storedAdmin = Cookies.get('admin');
 
-        console.log("storedUserId:", storedUserId); // Añade esta línea
-        console.log("storedAdmin:", storedAdmin);   // Añade esta línea
-
         if (storedUserId) {
             setUserId(parseInt(storedUserId, 10));
         }
-        console.log("Stored Admin:", storedAdmin);
+
         if (storedAdmin) {
-            setAdmin(storedAdmin === "1"); // Convert to boolean
+            setAdmin(storedAdmin === "1");
         }
     }, [isPopupOpen]);
 
@@ -44,9 +41,15 @@ const BurgerMenu = ({ onLogout }) => {
         Cookies.remove('token');
         Cookies.remove('admin');
         setUserId(null);
-        setAdmin(null)
+        setAdmin(null);
         onLogout();
-        console.log("cookies borradas");
+    };
+
+    const handleMyCourses = () => {
+        if (userId) {
+            onMyCourses(userId);
+        }
+        onClose();
     };
 
     return (
@@ -68,13 +71,9 @@ const BurgerMenu = ({ onLogout }) => {
                                 <>
                                     <Button w="100%" onClick={handleLogout} style={{fontFamily: 'Spoof Trial, sans-serif'}}>Cerrar sesión</Button>
                                     {admin ? (
-                                        <>
-                                            <Button w="100%" style={{fontFamily: 'Spoof Trial, sans-serif'}}>Crear curso</Button>
-                                            <Button w="100%" style={{fontFamily: 'Spoof Trial, sans-serif'}}>Editar curso</Button>
-                                            <Button w="100%" style={{fontFamily: 'Spoof Trial, sans-serif'}}>Eliminar curso</Button>
-                                        </>
+                                        <Button w="100%" style={{fontFamily: 'Spoof Trial, sans-serif'}}>Crear curso</Button>
                                     ) : (
-                                        <Button w="100%" style={{fontFamily: 'Spoof Trial, sans-serif'}}>Mis cursos</Button>
+                                        <Button w="100%" onClick={handleMyCourses} style={{fontFamily: 'Spoof Trial, sans-serif'}}>Mis cursos</Button>
                                     )}
                                 </>
                             ) : (

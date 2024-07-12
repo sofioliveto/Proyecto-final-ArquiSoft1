@@ -1,5 +1,5 @@
 import '../estilos/Inscribirmebutton.css';
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 
 const Inscribirmebutton = ({ courseId }) => {
@@ -16,7 +16,7 @@ const Inscribirmebutton = ({ courseId }) => {
 
     const storedAdmin = Cookies.get('admin');
     if (storedAdmin) {
-      setIsAdmin(storedAdmin === "1"); // Convert to boolean
+      setIsAdmin(storedAdmin === "1");
     }
 
     // Verificar si el usuario ya está inscrito en el curso

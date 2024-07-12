@@ -1,10 +1,8 @@
-import { Card, CardBody, CardFooter, Text, Stack, Image } from '@chakra-ui/react'
+import { Card, CardBody, CardFooter, Text, Stack, Image } from '@chakra-ui/react';
 import '../estilos/Course.css';
 import Inscribirmebutton from "./Inscribirmebutton.jsx";
 
-
 const Item = ({ course }) => {
-
     const formattedDate = new Date(course.fecha_inicio).toLocaleDateString('es-ES', {
         year: 'numeric',
         month: 'long',
@@ -31,14 +29,14 @@ const Item = ({ course }) => {
         >
             <Image
                 objectFit='cover'
-                maxW={{sm: '250px'}}
+                maxW={{ sm: '250px' }}
                 src={course.url_image}
-                alt='Imagen Curso'git
+                alt='Imagen Curso'
             />
 
             <Stack>
                 <CardBody className='body'>
-                    <h1 style={{fontFamily: 'Spoof Trial, sans-serif', fontWeight: 800, fontSize:30}}>{course.nombre}</h1>
+                    <h1 style={{ fontFamily: 'Spoof Trial, sans-serif', fontWeight: 800, fontSize: 30 }}>{course.nombre}</h1>
 
                     <Text py='2' className="card-text">
                         {course.descripcion}
@@ -47,7 +45,7 @@ const Item = ({ course }) => {
                         {course.categoria}
                     </Text>
                     <Text marginBottom='3px' display='flex' py='2' alignItems='center' className="card-text">
-                        <img src="/estrella.png" alt="estrella" width="20px" height="20px" style={{ marginRight: '5px' }}/>
+                        <img src="/estrella.png" alt="estrella" width="20px" height="20px" style={{ marginRight: '5px' }} />
                         {course.valoracion}/5
                     </Text>
                     <Text className="card-textt">
@@ -68,7 +66,7 @@ const Item = ({ course }) => {
                 </CardFooter>
             </Stack>
         </Card>
-    )
-}
+    );
+};
 
-export default Item
+export default Item;
