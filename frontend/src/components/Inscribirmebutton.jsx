@@ -5,7 +5,6 @@ import Cookies from "js-cookie";
 const Inscribirmebutton = ({ courseId }) => {
   const [userId, setUserId] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isEnrolled, setIsEnrolled] = useState(false);
   const tokenUser = Cookies.get('token');
 
   useEffect(() => {
@@ -18,34 +17,7 @@ const Inscribirmebutton = ({ courseId }) => {
     if (storedAdmin) {
       setIsAdmin(storedAdmin === "1");
     }
-
-    // Verificar si el usuario ya está inscrito en el curso
-    const checkEnrollment = async () => {
-      try {
-        const response = await fetch(`http://localhost:8080/check_enrollment`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            id_course: courseId,
-            id_user: storedUserId
-          }),
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          setIsEnrolled(result.isEnrolled);
-        }
-      } catch (error) {
-        console.log('Error al verificar la inscripción:', error);
-      }
-    };
-
-    if (storedUserId) {
-      checkEnrollment();
-    }
-  }, [courseId]);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -83,7 +55,6 @@ const Inscribirmebutton = ({ courseId }) => {
 
         if (response.ok) {
           alert("Inscripción exitosa! :)");
-          setIsEnrolled(true); // Actualiza el estado para ocultar el botón
         } else if (response.status === 500) {
           alert("Ya estás inscrito en este curso");
         }
@@ -94,7 +65,7 @@ const Inscribirmebutton = ({ courseId }) => {
     }
   };
 
-  if (!userId || isAdmin || isEnrolled) {
+  if (!userId || isAdmin) {
     return null;
   }
 

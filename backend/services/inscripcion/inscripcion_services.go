@@ -19,6 +19,8 @@ type inscrServiceInterface interface {
 	InsertInscr(inscripDto dto.InscripcionDto) (dto.InscripcionDto, errores.ApiError)
 	GetInscripcion() ([]dto.InscripcionDto, errores.ApiError)
 	GetCourseByUserId(inscripcionDto dto.InscripcionDto) ([]dto.InscripcionDto, errores.ApiError)
+	InsertValoracion(id int, valoracionDto dto.ValoracionDto) (dto.ValoracionDto, errores.ApiError)
+	InsertArchivo(id int, archivoDto dto.ArchivoDto) (dto.ArchivoDto, errores.ApiError)
 }
 
 var (
@@ -104,4 +106,50 @@ func (s *inscripService) GetCourseByUserId(inscripcionDto dto.InscripcionDto) ([
 
 	log.Debug(inscripcionDto)
 	return inscripcionesDto, nil
+}
+
+func (s *inscripService) InsertValoracion(id int, valoracionDto dto.ValoracionDto) (dto.ValoracionDto, errores.ApiError) {
+	var valoracion model.Users_x_courses
+
+	valoracion.Users_x_courses_id = id
+	valoracion.User_id = valoracionDto.Id_user
+	valoracion.Course_id = valoracionDto.Id_course
+	valoracion.Comentario = valoracionDto.Comentario
+	valoracion.Valoracion = valoracionDto.Valoracion
+
+	valoracion, err := s.inscripClient.InsertValoracion(id, valoracion)
+	if err != nil {
+		return dto.ValoracionDto{}, errores.NewInternalServerApiError("Error al agregar comentario y valoración", err)
+	}
+
+	var valoracionResponse dto.ValoracionDto
+	valoracionResponse.Id_inscripcion = valoracion.Users_x_courses_id
+	valoracionResponse.Id_user = valoracion.User_id
+	valoracionResponse.Id_course = valoracion.Course_id
+	valoracionResponse.Comentario = valoracion.Comentario
+	valoracionResponse.Valoracion = valoracion.Valoracion
+
+	return valoracionResponse, nil
+}
+
+func (s *inscripService) InsertArchivo(id int, archivoDto dto.ArchivoDto) (dto.ArchivoDto, errores.ApiError) {
+	var archivo model.Users_x_courses
+
+	archivo.Users_x_courses_id = id // Aquí utilizamos el id directamente en lugar de archivoDto.Id_inscripcion
+	archivo.User_id = archivoDto.Id_user
+	archivo.Course_id = archivoDto.Id_course
+	archivo.Archivo = archivoDto.Archivo
+
+	archivo, err := s.inscripClient.InsertArchivo(id, archivo)
+	if err != nil {
+		return dto.ArchivoDto{}, errores.NewInternalServerApiError("Error al agregar el archivo", err)
+	}
+
+	var archivoResponse dto.ArchivoDto
+	archivoResponse.Id_inscripcion = archivo.Users_x_courses_id
+	archivoResponse.Id_user = archivo.User_id
+	archivoResponse.Id_course = archivo.Course_id
+	archivoResponse.Archivo = archivo.Archivo
+
+	return archivoResponse, nil
 }

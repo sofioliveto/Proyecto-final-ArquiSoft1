@@ -65,3 +65,73 @@ func GetCourseByUserId(c *gin.Context) {
 	// Envía una respuesta 200 OK con los datos de los cursos del usuario
 	c.JSON(http.StatusOK, inscrsDto)
 }
+
+func InsertValoracion(c *gin.Context) {
+	var valoracionDto dto.ValoracionDto
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	err := c.BindJSON(&valoracionDto)
+	if err != nil {
+		log.Error("Error al parsear JSON: ", err.Error())
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	valoracionResponse, er := serviceInscr.InscripcionService.InsertValoracion(id, valoracionDto)
+	if er != nil {
+		log.Error("Error al agregar comentario y valoración: ", er.Error())
+		c.JSON(http.StatusInternalServerError, er.Error())
+		return
+	}
+
+	c.JSON(http.StatusCreated, valoracionResponse)
+}
+
+func InsertArchivo(c *gin.Context) {
+	var archivoDto dto.ArchivoDto
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		log.Error("Error al convertir id: ", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
+		return
+	}
+
+	file, err := c.FormFile("archivo")
+	if err != nil {
+		log.Error("Error al obtener archivo: ", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error al obtener archivo"})
+		return
+	}
+
+	fileContent, err := file.Open()
+	if err != nil {
+		log.Error("Error al abrir archivo: ", err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al abrir archivo"})
+		return
+	}
+	defer fileContent.Close()
+
+	archivoBytes := make([]byte, file.Size)
+	_, err = fileContent.Read(archivoBytes)
+	if err != nil {
+		log.Error("Error al leer archivo: ", err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al leer archivo"})
+		return
+	}
+
+	archivoDto.Archivo = archivoBytes
+	if err := c.ShouldBind(&archivoDto); err != nil {
+		log.Error("Error al parsear datos adicionales: ", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error al parsear datos adicionales"})
+		return
+	}
+
+	archivoResponse, er := serviceInscr.InscripcionService.InsertArchivo(id, archivoDto)
+	if er != nil {
+		log.Error("Error al subir archivo: ", er.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al subir archivo"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, archivoResponse)
+}

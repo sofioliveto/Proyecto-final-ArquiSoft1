@@ -24,5 +24,7 @@ func mapUrls() {
 	router.POST("/inscripcion", controllers_inscripcion.InsertInscr)
 	router.GET("/inscripciones", controllers_inscripcion.GetInscripcion)
 	router.GET("/inscripciones/:id_user", controllers_inscripcion.GetCourseByUserId)
+	router.POST("/valorar/:id", controllers_inscripcion.InsertValoracion)
+	router.POST("/archivo/:id", controllers_inscripcion.InsertArchivo)
 
 }

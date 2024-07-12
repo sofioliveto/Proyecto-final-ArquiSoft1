@@ -31,8 +31,10 @@ CREATE TABLE IF NOT EXISTS `users_x_courses` (
                                                  `users_x_courses_id` int(11) NOT NULL,
     `user_id` int(11) NOT NULL,
     `course_id` int(11) NOT NULL,
-    `fecha_inscripcion` DATE NOT NULL
-
+    `fecha_inscripcion` DATE NOT NULL,
+    `valoracion` decimal(2,1),
+    `comentario` varchar(500),
+    `archivo` blob
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -51,7 +53,7 @@ ALTER TABLE `courses`
 
 ALTER TABLE `users_x_courses`
     ADD PRIMARY KEY (`users_x_courses_id`),
-    ADD UNIQUE KEY `users_x_courses_id2` (`user_id`, `course_id`, `fecha_inscripcion`);
+    ADD UNIQUE KEY `users_x_courses_id2` (`user_id`, `course_id`);
 
 --
 -- Autoincrementado de tablas
