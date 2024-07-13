@@ -7,21 +7,21 @@ import {
     ModalBody,
     ModalCloseButton
 } from "@chakra-ui/react";
-import RegisterUser from './RegisterUser.jsx';
+import Valorar from './Valorar.jsx';
 
-const PopupRegister = ({ isOpen, onClose }) => {
+const PopupValorar = ({ isOpen, onClose, courseId }) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader style={{fontFamily: 'Spoof Trial, sans-serif'}}>Registrarme</ModalHeader>
+                <ModalHeader style={{fontFamily: 'Spoof Trial, sans-serif'}}>Valorar</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <RegisterUser onClose={onClose} />
+                    <EditCourse courseId={courseId} onClose={onClose} />
                 </ModalBody>
             </ModalContent>
         </Modal>
     );
 };
 
-export default PopupRegister;
+export default PopupEdit;

@@ -1,20 +1,23 @@
-import {Card, CardBody, CardFooter, Text, Stack, Image, Button} from '@chakra-ui/react';
-import '../estilos/Course.css';
-import Inscribirmebutton from "./Inscribirmebutton.jsx";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Cookies from "js-cookie";
-import {useEffect, useState} from "react";
+import { Button, Stack, Card, CardBody, CardFooter, Text, Image, useDisclosure } from "@chakra-ui/react";
+import Inscribirmebutton from "./Inscribirmebutton.jsx";
+import PopupEdit from "./PopUpEdit.jsx";
+import '../estilos/Inscribirmebutton.css';
+import '../estilos/Course.css';
 
-const Item = ({ course }) => {
-    const [userId, setUserId] = useState(null); // Inicialmente null
+const Item = ({ course, bandera }) => {
+    const [userId, setUserId] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [isEnrolled, setIsEnrolled] = useState(false);
+    const { isOpen: isPopupOpenEdit, onOpen: onOpenPopupEdit, onClose: onClosePopupEdit } = useDisclosure();
 
     const formattedDate = new Date(course.fecha_inicio).toLocaleDateString('es-ES', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
     });
-
-    const validUserId = typeof userId === 'number' ? userId : parseInt(userId, 10);
 
     useEffect(() => {
         const storedUserId = Cookies.get('user_id');
@@ -24,9 +27,23 @@ const Item = ({ course }) => {
 
         const storedAdmin = Cookies.get('admin');
         if (storedAdmin) {
-            setIsAdmin(storedAdmin === "1"); // Convert to boolean
+            setIsAdmin(storedAdmin === "1");
         }
     }, []);
+
+    useEffect(() => {
+        if (userId) {
+            axios.get(`http://localhost:8080/inscripciones/${userId}`)
+                .then(response => {
+                    const userCourses = response.data;
+                    const isUserEnrolled = userCourses.some(userCourse => userCourse.id === course.course_id);
+                    setIsEnrolled(isUserEnrolled);
+                })
+                .catch(error => {
+                    console.error("Error fetching courses", error);
+                });
+        }
+    }, [userId, course.course_id]);
 
     const getProfesorName = (profesor_id) => {
         const profesores = {
@@ -40,60 +57,59 @@ const Item = ({ course }) => {
         return profesores[profesor_id] || 'Profesor desconocido';
     };
 
+    const handleEditCourse = () => {
+        onOpenPopupEdit();
+    };
+
     return (
-        <Card
-            direction={{ base: 'column', sm: 'row' }}
-            overflow='hidden'
-            variant='outline'
-        >
-            <Image
-                objectFit='cover'
-                maxW={{ sm: '250px' }}
-                src={course.url_image}
-                alt='Imagen Curso'
-            />
+        <Card direction={{ base: 'column', sm: 'row' }} overflow='hidden' variant='outline'>
+            {bandera !== 1 ? (
+                <Image
+                    objectFit='cover'
+                    maxW={{ sm: '250px' }}
+                    src={course.url_image}
+                    alt='Imagen Curso'
+                />
+            ) : null}
 
             <Stack>
                 <CardBody className='body'>
                     <h1 style={{ fontFamily: 'Spoof Trial, sans-serif', fontWeight: 800, fontSize: 30 }}>{course.nombre}</h1>
 
-                    <Text py='2' className="card-text">
-                        {course.descripcion}
-                    </Text>
-                    <Text py='2' className="card-text">
-                        {course.categoria}
-                    </Text>
+                    <Text py='2' className="card-text">{course.descripcion}</Text>
+                    <Text py='2' className="card-text">{course.categoria}</Text>
                     <Text marginBottom='3px' display='flex' py='2' alignItems='center' className="card-text">
                         <img src="/estrella.png" alt="estrella" width="20px" height="20px" style={{ marginRight: '5px' }} />
                         {course.valoracion}/5
                     </Text>
-                    <Text className="card-textt">
-                        Duracion: {course.duracion}hs
-                    </Text>
-                    <Text className="card-textt">
-                        Fecha de inicio: {formattedDate}
-                    </Text>
-                    <Text className="card-textt">
-                        Requisito: Nivel {course.requisitos}
-                    </Text>
-                    <Text className="card-textt">
-                        Profesor: {getProfesorName(course.profesor_id)}
-                    </Text>
+                    <Text className="card-textt">Duracion: {course.duracion}hs</Text>
+                    <Text className="card-textt">Fecha de inicio: {formattedDate}</Text>
+                    <Text className="card-textt">Requisito: Nivel {course.requisitos}</Text>
+                    <Text className="card-textt">Profesor: {getProfesorName(course.profesor_id)}</Text>
                 </CardBody>
                 <CardFooter>
-                    {validUserId ? (
+                    {userId && (
                         isAdmin ? (
                             <>
-                                <Button w="100%" style={{fontFamily: 'Spoof Trial, sans-serif'}}>Editar curso</Button>
-                                <Button w="100%" style={{fontFamily: 'Spoof Trial, sans-serif'}}>Eliminar curso</Button>
+                                <Button w="100%" style={{ fontFamily: 'Spoof Trial, sans-serif' }}>Editar curso</Button>
+                                <Button w="100%" style={{ fontFamily: 'Spoof Trial, sans-serif' }}>Eliminar curso</Button>
                             </>
                         ) : (
-                            <Inscribirmebutton courseId={course.course_id} />
+                            isEnrolled ? (
+                                <>
+                                    <Button w="100%" style={{ fontFamily: 'Spoof Trial, sans-serif' }}>Valorar y Comentar</Button>
+                                    <Button w="100%" style={{ fontFamily: 'Spoof Trial, sans-serif' }}>Subir Archivo</Button>
+                                </>
+                            ) : (
+                                bandera !== 1 ? (
+                                    <Inscribirmebutton courseId={course.course_id} />
+                                ) : null
+                            )
                         )
-                    ) : null}
-
+                    )}
                 </CardFooter>
             </Stack>
+            <PopupEdit isOpen={isPopupOpenEdit} onClose={onClosePopupEdit} courseId={course.course_id} />
         </Card>
     );
 };

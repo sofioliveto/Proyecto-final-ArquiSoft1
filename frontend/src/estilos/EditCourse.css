@@ -1,31 +1,32 @@
-/* estilos/Login.css */
-
-#formLogin {
+#formEditCourse {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    
+    padding: 2rem;
+    background-color: white; /* Color de fondo del pop-up */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra del pop-up */
 }
 
-.inputEmail, .inputContrasena {
+.inputField {
     margin-top: 1rem;
     margin-bottom: 1rem;
     width: 300px; /* Ancho de las cajas de entrada */
 }
 
-.inputContrasena::placeholder{
+.inputField::placeholder {
     color: #000;
 }
 
-.inputContrasena .chakra-input__right-element {
+.inputField .chakra-input__right-element {
     display: flex;
     align-items: center;
     justify-content: center;
-    right: 0.5rem; /* Ajuste para centrar el botón en la caja de contraseña */
+    right: 0.5rem; /* Ajuste para centrar el botón en la caja de entrada */
 }
 
-.inputContrasena button {
+.inputField button {
     color: black;
     font-weight: bold;
 }
@@ -40,4 +41,10 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
     background-color: #333;
+}
+
+.error {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 1rem;
 }
