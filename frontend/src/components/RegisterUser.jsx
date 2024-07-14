@@ -1,6 +1,5 @@
 import React from 'react';
-import Cookies from 'js-cookie';
-import {Button, Input, FormControl, FormLabel, Select, InputRightElement} from "@chakra-ui/react";
+import {Button, Input, FormControl, FormLabel, Select, InputRightElement, InputGroup} from "@chakra-ui/react";
 import '../estilos/RegisterUser.css'
 
 const RegisterUser = ({ onClose }) => {
@@ -10,6 +9,8 @@ const RegisterUser = ({ onClose }) => {
     const [password, setPassword] = React.useState('');
     const [admin, setAdmin] = React.useState(''); // Mantener como string para el dropdown
     const [errorMessage, setErrorMessage] = React.useState('');
+    const [show, setShow] = React.useState(false);
+    const handleClick = () => setShow(!show);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

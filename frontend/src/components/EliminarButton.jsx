@@ -20,9 +20,8 @@ const DeleteCourse = ({ courseId, onClose }) => {
 
             if (response.ok) {
                 alert('Curso eliminado exitosamente');
-                onClose(); // Cierra el formulario
                 window.location.reload(); // Recargar la página
-            } else {
+                } else {
                 const errorData = await response.json();
                 alert(`Error al eliminar el curso: ${errorData.message}`);
             }
@@ -35,7 +34,7 @@ const DeleteCourse = ({ courseId, onClose }) => {
 
 
     return (
-        <button className="delete-button" onClick={handleDelete}>ELIMINAR CURSO</button>
+        <button className="delete-button" onClick={handleDelete}>ELIMINAR</button>
     );
 };
 

@@ -21,6 +21,7 @@ type inscrServiceInterface interface {
 	GetCourseByUserId(inscripcionDto dto.InscripcionDto) ([]dto.InscripcionDto, errores.ApiError)
 	InsertValoracion(id int, valoracionDto dto.ValoracionDto) (dto.ValoracionDto, errores.ApiError)
 	InsertArchivo(id int, archivoDto dto.ArchivoDto) (dto.ArchivoDto, errores.ApiError)
+	GetComentByCourseId(valoracionDto dto.ValoracionDto) ([]dto.ValoracionDto, errores.ApiError)
 }
 
 var (
@@ -152,4 +153,23 @@ func (s *inscripService) InsertArchivo(id int, archivoDto dto.ArchivoDto) (dto.A
 	archivoResponse.Archivo = archivo.Archivo
 
 	return archivoResponse, nil
+}
+
+func (s *inscripService) GetComentByCourseId(valoracionDto dto.ValoracionDto) ([]dto.ValoracionDto, errores.ApiError) {
+	inscripciones := s.inscripClient.GetComentByCourseId(valoracionDto.Id_course)
+	var valoracionesDto []dto.ValoracionDto
+
+	for _, inscripcion := range inscripciones {
+		var valDto dto.ValoracionDto
+		valDto.Id_inscripcion = inscripcion.Users_x_courses_id
+		valDto.Id_user = inscripcion.User_id
+		valDto.Id_course = inscripcion.Course_id
+		valDto.Comentario = inscripcion.Comentario
+		valDto.Valoracion = inscripcion.Valoracion
+
+		valoracionesDto = append(valoracionesDto, valDto)
+	}
+
+	log.Debug(valoracionDto)
+	return valoracionesDto, nil
 }

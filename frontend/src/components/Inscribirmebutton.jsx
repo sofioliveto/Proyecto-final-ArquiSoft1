@@ -71,9 +71,7 @@ const Inscribirmebutton = ({ courseId }) => {
   }
 
   return (
-      <button className="subscribe-button" onClick={handleSubmit}>
-        INSCRIBIRME
-      </button>
+      <button className="subscribe-button" onClick={handleSubmit}>INSCRIBIRME</button>
   );
 }
 

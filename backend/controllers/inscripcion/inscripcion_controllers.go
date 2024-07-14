@@ -135,3 +135,20 @@ func InsertArchivo(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, archivoResponse)
 }
+
+func GetComentByCourseId(c *gin.Context) {
+	courseId := c.Param("id_course")
+
+	var valDto dto.ValoracionDto
+	valDto.Id_course, _ = strconv.Atoi(courseId)
+
+	valsDto, err := serviceInscr.InscripcionService.GetComentByCourseId(valDto)
+	if err != nil {
+		log.Error("Error al obtener cursos por ID de usuario: ", err.Error())
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	// Envía una respuesta 200 OK con los datos de los cursos del usuario
+	c.JSON(http.StatusOK, valsDto)
+}

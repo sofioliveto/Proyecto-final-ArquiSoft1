@@ -3,11 +3,13 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { Button, Stack, Card, CardBody, CardFooter, Text, Image, useDisclosure } from "@chakra-ui/react";
 import Inscribirmebutton from "./Inscribirmebutton.jsx";
+import EliminarButton from "./EliminarButton.jsx";
 import PopupEdit from "./PopUpEdit.jsx";
 import '../estilos/Inscribirmebutton.css';
 import '../estilos/Course.css';
 import PopupValorar from "./PopUpValorar.jsx"
 import PopupSubirArchivo from "./PopUpArchivo.jsx";
+import PopupSeeReview from "./PopUpSeeReview.jsx";
 
 const Item = ({ course, bandera }) => {
     const [userId, setUserId] = useState(null);
@@ -16,7 +18,7 @@ const Item = ({ course, bandera }) => {
     const { isOpen: isPopupOpenEdit, onOpen: onOpenPopupEdit, onClose: onClosePopupEdit } = useDisclosure();
     const { isOpen: isPopupOpenValorar, onOpen: onOpenPopupValorar, onClose: onClosePopupValorar } = useDisclosure();
     const { isOpen: isPopupOpenSubirArchivo, onOpen: onOpenPopupSubirArchivo, onClose: onClosePopupSubirArchivo } = useDisclosure();
-
+    const { isOpen: isPopupOpenSeeReview , onOpen: onOpenPopupSeeReview , onClose: onClosePopupSeeReview } = useDisclosure();
 
     const formattedDate = new Date(course.fecha_inicio).toLocaleDateString('es-ES', {
         year: 'numeric',
@@ -77,6 +79,9 @@ const Item = ({ course, bandera }) => {
         onOpenPopupSubirArchivo();
     };
 
+    const handleSeeReview = () => {
+        onOpenPopupSeeReview();
+    };
 
 
     return (
@@ -109,27 +114,36 @@ const Item = ({ course, bandera }) => {
                     {userId && (
                         isAdmin ? (
                             <>
-                                <Button w="100%" style={{ fontFamily: 'Spoof Trial, sans-serif' }} onClick={handleEditCourse}>Editar curso</Button>
-                                <Button w="100%" style={{ fontFamily: 'Spoof Trial, sans-serif' }}>Eliminar curso</Button>
+                                <Button w="40%" style={{ fontFamily: 'Spoof Trial, sans-serif' }} onClick={handleEditCourse}>Editar</Button>
+                                <EliminarButton courseId={course.course_id} />
+                                <Button w="75%" style={{ fontFamily: 'Spoof Trial, sans-serif' }} onClick={handleSeeReview}>Ver review</Button>
                             </>
                         ) : (
                             isEnrolled ? (
-                                <>
-                                    <Button w="100%" style={{ fontFamily: 'Spoof Trial, sans-serif' }} onClick={handleValorarCourse}>Valorar</Button>
-                                    <Button w="100%" style={{ fontFamily: 'Spoof Trial, sans-serif' }} onClick={handleSubirArchivo}>Subir archivo</Button>
-                                </>
+                                bandera !== 1 ? (
+                                    <>
+                                        <Button w="75%" style={{ fontFamily: 'Spoof Trial, sans-serif', margin: '0 10px' }} onClick={handleValorarCourse}>Valorar</Button>
+                                        <Button w="75%" style={{ fontFamily: 'Spoof Trial, sans-serif' }} onClick={handleSubirArchivo}>Subir archivo</Button>
+                                        <Button w="75%" style={{ fontFamily: 'Spoof Trial, sans-serif' }} onClick={handleSeeReview}>Ver review</Button>
+                                    </>
+                                ) : null
                             ) : (
                                 bandera !== 1 ? (
+                                    <>
                                     <Inscribirmebutton courseId={course.course_id} />
-                                ) : null
+                                    <Button w="75%" style={{ fontFamily: 'Spoof Trial, sans-serif' }} onClick={handleSeeReview}>Ver review</Button>
+                                    </>
+                ) : null
                             )
                         )
                     )}
+
                 </CardFooter>
             </Stack>
             <PopupEdit isOpen={isPopupOpenEdit} onClose={onClosePopupEdit} courseId={course.course_id} />
             <PopupValorar isOpen={isPopupOpenValorar} onClose={onClosePopupValorar} courseId={course.course_id} />
             <PopupSubirArchivo isOpen={isPopupOpenSubirArchivo} onClose={onClosePopupSubirArchivo} courseId={course.course_id} />
+            <PopupSeeReview isOpen={isPopupOpenSeeReview} onClose={onClosePopupSeeReview} courseId={course.course_id} />
         </Card>
     );
 };

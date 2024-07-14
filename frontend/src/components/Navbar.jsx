@@ -24,9 +24,7 @@ export const Navbar = () => {
     window.location.reload(); //Recargo la pagina porque sino me sigue dejando inscribirme a cursos
   };
 
-
   const validUserId = typeof userId === 'number' ? userId : parseInt(userId, 10);
-
 
   return (
       <header>

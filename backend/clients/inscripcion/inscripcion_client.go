@@ -14,6 +14,7 @@ type InscripcionClientInterface interface {
 	GetCourseByUserId(id int) model.Userss_x_coursess
 	InsertValoracion(id int, valoracion model.Users_x_courses) (model.Users_x_courses, error)
 	InsertArchivo(id int, archivo model.Users_x_courses) (model.Users_x_courses, error)
+	GetComentByCourseId(id int) model.Userss_x_coursess
 }
 
 var (
@@ -92,4 +93,12 @@ func (s *inscripcionClient) InsertArchivo(id int, archivo model.Users_x_courses)
 
 	log.Debug("Entrega actualizada: ", inscripcion.Users_x_courses_id)
 	return inscripcion, nil
+}
+
+func (s *inscripcionClient) GetComentByCourseId(id int) model.Userss_x_coursess {
+	var inscripciones model.Userss_x_coursess
+	clients.Db.Where("course_id = ?", id).Find(&inscripciones)
+
+	log.Debug("Inscripciones: ", inscripciones)
+	return inscripciones
 }
