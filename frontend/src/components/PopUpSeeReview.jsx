@@ -14,10 +14,10 @@ const PopupSeeReview = ({ isOpen, onClose, courseId }) => {
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader style={{fontFamily: 'Spoof Trial, sans-serif'}}>Reviews</ModalHeader>
+                <ModalHeader>Reviews</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <SeeReviews courseId={courseId} onClose={onClose} />
+                    <SeeReviews isOpen={isOpen} courseId={courseId} />
                 </ModalBody>
             </ModalContent>
         </Modal>
