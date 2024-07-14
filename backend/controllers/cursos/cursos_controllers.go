@@ -56,19 +56,19 @@ func InsertCourse(c *gin.Context) {
 	var course dto.CourseDto
 	err := c.BindJSON(&course)
 	if err != nil {
-		log.Error("Error al parsear el JSON: ", err.Error())
-		c.JSON(http.StatusBadRequest, err.Error())
+		log.Println("Error al parsear el JSON: ", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Error al parsear el JSON"})
 		return
 	}
 
-	course, er := servicios.CourseService.InsertCourse(course)
+	createdCourse, er := servicios.CourseService.InsertCourse(course)
 	if er != nil {
-		log.Error("Error al crear curso: ", er.Error())
-		c.JSON(http.StatusInternalServerError, er.Error())
+		log.Println("Error al crear curso: ", er.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Error al crear curso"})
 		return
 	}
 
-	c.JSON(http.StatusCreated, course)
+	c.JSON(http.StatusCreated, createdCourse)
 }
 
 func EditCourse(c *gin.Context) {

@@ -55,6 +55,7 @@ const Inscribirmebutton = ({ courseId }) => {
 
         if (response.ok) {
           alert("Inscripción exitosa! :)");
+          window.location.reload()
         } else if (response.status === 500) {
           alert("Ya estás inscrito en este curso");
         }

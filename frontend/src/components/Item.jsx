@@ -6,12 +6,17 @@ import Inscribirmebutton from "./Inscribirmebutton.jsx";
 import PopupEdit from "./PopUpEdit.jsx";
 import '../estilos/Inscribirmebutton.css';
 import '../estilos/Course.css';
+import PopupValorar from "./PopUpValorar.jsx"
+import PopupSubirArchivo from "./PopUpArchivo.jsx";
 
 const Item = ({ course, bandera }) => {
     const [userId, setUserId] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
     const [isEnrolled, setIsEnrolled] = useState(false);
     const { isOpen: isPopupOpenEdit, onOpen: onOpenPopupEdit, onClose: onClosePopupEdit } = useDisclosure();
+    const { isOpen: isPopupOpenValorar, onOpen: onOpenPopupValorar, onClose: onClosePopupValorar } = useDisclosure();
+    const { isOpen: isPopupOpenSubirArchivo, onOpen: onOpenPopupSubirArchivo, onClose: onClosePopupSubirArchivo } = useDisclosure();
+
 
     const formattedDate = new Date(course.fecha_inicio).toLocaleDateString('es-ES', {
         year: 'numeric',
@@ -32,17 +37,20 @@ const Item = ({ course, bandera }) => {
     }, []);
 
     useEffect(() => {
-        if (userId) {
-            axios.get(`http://localhost:8080/inscripciones/${userId}`)
-                .then(response => {
-                    const userCourses = response.data;
-                    const isUserEnrolled = userCourses.some(userCourse => userCourse.id === course.course_id);
-                    setIsEnrolled(isUserEnrolled);
-                })
-                .catch(error => {
-                    console.error("Error fetching courses", error);
-                });
-        }
+        const checkEnrollment = async () => {
+            if (userId) {
+                try {
+                    const response = await axios.get(`http://localhost:8080/inscripciones/${userId}`);
+                    const inscripciones = response.data;
+                    const enrolled = inscripciones.some(inscripcion => inscripcion.id_course === course.course_id);
+                    setIsEnrolled(enrolled);
+                } catch (error) {
+                    console.error('Error checking enrollment:', error);
+                }
+            }
+        };
+
+        checkEnrollment();
     }, [userId, course.course_id]);
 
     const getProfesorName = (profesor_id) => {
@@ -60,6 +68,16 @@ const Item = ({ course, bandera }) => {
     const handleEditCourse = () => {
         onOpenPopupEdit();
     };
+
+    const handleValorarCourse =()=>{
+        onOpenPopupValorar();
+    }
+
+    const handleSubirArchivo = () => {
+        onOpenPopupSubirArchivo();
+    };
+
+
 
     return (
         <Card direction={{ base: 'column', sm: 'row' }} overflow='hidden' variant='outline'>
@@ -91,14 +109,14 @@ const Item = ({ course, bandera }) => {
                     {userId && (
                         isAdmin ? (
                             <>
-                                <Button w="100%" style={{ fontFamily: 'Spoof Trial, sans-serif' }}>Editar curso</Button>
+                                <Button w="100%" style={{ fontFamily: 'Spoof Trial, sans-serif' }} onClick={handleEditCourse}>Editar curso</Button>
                                 <Button w="100%" style={{ fontFamily: 'Spoof Trial, sans-serif' }}>Eliminar curso</Button>
                             </>
                         ) : (
                             isEnrolled ? (
                                 <>
-                                    <Button w="100%" style={{ fontFamily: 'Spoof Trial, sans-serif' }}>Valorar y Comentar</Button>
-                                    <Button w="100%" style={{ fontFamily: 'Spoof Trial, sans-serif' }}>Subir Archivo</Button>
+                                    <Button w="100%" style={{ fontFamily: 'Spoof Trial, sans-serif' }} onClick={handleValorarCourse}>Valorar</Button>
+                                    <Button w="100%" style={{ fontFamily: 'Spoof Trial, sans-serif' }} onClick={handleSubirArchivo}>Subir archivo</Button>
                                 </>
                             ) : (
                                 bandera !== 1 ? (
@@ -110,6 +128,8 @@ const Item = ({ course, bandera }) => {
                 </CardFooter>
             </Stack>
             <PopupEdit isOpen={isPopupOpenEdit} onClose={onClosePopupEdit} courseId={course.course_id} />
+            <PopupValorar isOpen={isPopupOpenValorar} onClose={onClosePopupValorar} courseId={course.course_id} />
+            <PopupSubirArchivo isOpen={isPopupOpenSubirArchivo} onClose={onClosePopupSubirArchivo} courseId={course.course_id} />
         </Card>
     );
 };
