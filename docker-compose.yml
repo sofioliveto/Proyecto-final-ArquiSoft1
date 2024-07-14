@@ -1,0 +1,53 @@
+version: '3.9'
+
+services:
+  dbmysql:
+    image: mysql:8
+    container_name: dbmysql
+    environment:
+      MYSQL_DATABASE: dbarquisoft1
+      MYSQL_ROOT_PASSWORD: Belgrano1905
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-P", "3306"]
+      interval: 10s
+      timeout: 20s
+      retries: 10
+    networks:
+      - backend
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      dbmysql:
+        condition: service_healthy
+    ports:
+      - "5173:80"
+    networks:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      dbmysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: dbmysql
+      DB_PORT: "3306"
+      DB_USER: root
+      DB_PASSWORD: Belgrano1905
+      DB_NAME: dbarquisoft1
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+
+networks:
+  backend:
