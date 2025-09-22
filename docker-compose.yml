@@ -1,53 +1,94 @@
-version: '3.9'
+# docker-compose.yml - Levanta QA, PROD y DBs con la misma imagen del backend y frontend
 
 services:
-  dbmysql:
-    image: mysql:8
-    container_name: dbmysql
+  # ---------- Bases de datos ----------
+  mysql-qa:
+    image: mysql:8.4
+    container_name: mysql-qa
     environment:
-      MYSQL_DATABASE: dbarquisoft1
-      MYSQL_ROOT_PASSWORD: Belgrano1905
+      MYSQL_DATABASE: db-qa
+      MYSQL_ROOT_PASSWORD: 44898366
     ports:
       - "3307:3306"
     volumes:
-      - ./db:/docker-entrypoint-initdb.d
+      - mysqlqa_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-P", "3306"]
-      interval: 10s
-      timeout: 20s
-      retries: 10
-    networks:
-      - backend
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p44898366"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks: [qa]
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+  mysql-prod:
+    image: mysql:8.4
+    container_name: mysql-prod
+    environment:
+      MYSQL_DATABASE: db-prod
+      MYSQL_ROOT_PASSWORD: 44898366
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysqlprod_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p44898366"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks: [prod]
+
+  # ---------- Apps backend (MISMA IMAGEN) ----------
+  backend-qa:
+    image: sofiioliveto/backend-app:dev
+    container_name: backend-qa
+    environment:
+      ENVIRONMENT: qa
+      DB_HOST: mysql-qa
+      DB_PORT: "3306"
+      DB_NAME: db-qa
+      DB_USER: root
+      DB_PASSWORD: 44898366
+    ports:
+      - "8081:8080"
     depends_on:
-      dbmysql:
+      mysql-qa:
         condition: service_healthy
+    networks: [qa]
+
+  backend-prod:
+    image: sofiioliveto/backend-app:dev
+    container_name: backend-prod
+    environment:
+      ENVIRONMENT: prod
+      DB_HOST: mysql-prod
+      DB_PORT: "3306"
+      DB_NAME: db-prod
+      DB_USER: root
+      DB_PASSWORD: 44898366
+    ports:
+      - "8082:8080"
+    depends_on:
+      mysql-prod:
+        condition: service_healthy
+    networks: [prod]
+
+  # ---------- Frontend ----------
+  frontend:
+    image: sofiioliveto/frontend-app:dev
+    container_name: frontend
     ports:
       - "5173:80"
-    networks:
-      - backend
-
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
     depends_on:
-      dbmysql:
-        condition: service_healthy
-    environment:
-      DB_HOST: dbmysql
-      DB_PORT: "3306"
-      DB_USER: root
-      DB_PASSWORD: Belgrano1905
-      DB_NAME: dbarquisoft1
-    ports:
-      - "8080:8080"
+      - backend-qa
+      - backend-prod
     networks:
-      - backend
+      - qa
+      - prod
 
+# ---------- Redes y Volúmenes ----------
 networks:
-  backend:
+  qa: {}
+  prod: {}
+
+volumes:
+  mysqlqa_data: {}
+  mysqlprod_data: {}
